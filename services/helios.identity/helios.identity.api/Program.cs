@@ -1,10 +1,7 @@
 
-namespace helios.identity
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
+namespace helios.identity.api {
+    public class Program {
+        public static void Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -17,8 +14,7 @@ namespace helios.identity
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+            if (app.Environment.IsDevelopment()) {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }

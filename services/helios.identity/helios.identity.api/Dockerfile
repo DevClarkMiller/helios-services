@@ -12,19 +12,19 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["helios.identity/helios.identity.csproj", "helios.identity/"]
-RUN dotnet restore "./helios.identity/helios.identity.csproj"
+COPY ["helios.identity.api/helios.identity.api.csproj", "helios.identity.api/"]
+RUN dotnet restore "./helios.identity.api/helios.identity.api.csproj"
 COPY . .
-WORKDIR "/src/helios.identity"
-RUN dotnet build "./helios.identity.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/helios.identity.api"
+RUN dotnet build "./helios.identity.api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./helios.identity.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./helios.identity.api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "helios.identity.dll"]
+ENTRYPOINT ["dotnet", "helios.identity.api.dll"]
