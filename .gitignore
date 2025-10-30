@@ -7,6 +7,16 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/Dotnet.gitignore
 
+.vs
+
+# Ignore sensitive or environment-specific configs
+appsettings.Development.json
+appsettings.Production.json
+appsettings.*.local.json
+.env
+AssemblyInfo.cs
+
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
