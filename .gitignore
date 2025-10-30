@@ -15,6 +15,7 @@ appsettings.Production.json
 appsettings.*.local.json
 .env
 AssemblyInfo.cs
+node_modules
 
 
 # Build results
