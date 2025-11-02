@@ -32,7 +32,8 @@ const Login = () => {
 		<div>
 			<div className="text-center w-100 mb-4">
 				<h1>Login</h1>
-				<h3>Glad to have you back</h3>
+				{/* TODO: STORE TOKEN TO CHANGE MESSAGE CONDITIONALLY HERE */}
+				<h3>Glad to have you back</h3> 
 			</div>
 
 			<div className="card p-2">
