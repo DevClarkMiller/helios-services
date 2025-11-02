@@ -1,6 +1,0 @@
-@helios.identity.api_HostAddress = http://localhost:5174
-
-GET {{helios.identity.api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

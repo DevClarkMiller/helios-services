@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace helios.identity.data {
     public class IdentityContext : DbContext {
@@ -29,7 +24,7 @@ namespace helios.identity.data {
                 },
                 new Provider { 
                     Id = 3,
-                    Name = "local"
+                    Name = "helios"
                 },
             ]);
         }
