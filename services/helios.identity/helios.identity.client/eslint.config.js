@@ -1,23 +1,50 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import pluginReact from "eslint-plugin-react";
+import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-    ],
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-    },
-  },
-])
+	{ 
+		files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], 
+		plugins: { js }, 
+		extends: ["js/recommended"], 
+		languageOptions: { 
+			sourceType: 'module',
+			globals: { ...globals.browser, ...globals.node },
+		},
+		rules: {
+			// Prettier formatting
+			'prettier/prettier': 'error',
+			// TypeScript-specific rules
+			'@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+			'@typescript-eslint/no-var-requires': 'error',
+
+			// React rules
+			'react/prop-types': 'off',
+			'react/display-name': 'off',
+			'react/react-in-jsx-scope': 'off',
+
+			// React Hooks
+			'react-hooks/rules-of-hooks': 'error',
+			'react-hooks/exhaustive-deps': 'error',
+
+			// General JS rules
+			semi: ['error', 'always'],
+			'no-console': 'off',
+			'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 0, maxEOF: 0 }],
+			'no-useless-concat': 'error',
+			'no-array-constructor': 'error',
+			'no-new-object': 'error',
+			'no-var': 'error',
+
+			// Disable ESLint built-in indent since Prettier handles it
+			indent: 'off',
+
+			// JSX handler naming convention
+			'react/jsx-handler-names': ['error', { eventHandlerPrefix: 'handle', eventHandlerPropPrefix: 'on' }],
+		},
+	},
+	tseslint.configs.recommended,
+	pluginReact.configs.flat.recommended,
+]);

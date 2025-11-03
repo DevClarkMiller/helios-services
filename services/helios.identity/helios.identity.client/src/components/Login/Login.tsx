@@ -19,14 +19,14 @@ const Login = () => {
 		setFormData(prev => ({
 			...prev,
 			[name]: value,
-		}));
-	}
+		}))
+	};
 
 	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
 		if (e && e.preventDefault) e.preventDefault();
 
-		alert("Submission");
-	}
+		alert(`Email: ${formData?.email}, Password: ${formData?.password}`);
+	};
 
 	return (
 		<div>
@@ -76,7 +76,7 @@ const Login = () => {
 					</form>
 				</div>
 
-				<Link to='/createAccount'>Don't have an account? Sign up</Link>
+				<Link className="p-3 pt-1 text-decoration-none" to='/createAccount'>Don't have an account? Sign up</Link>
 
 			</div>
 		</div>
