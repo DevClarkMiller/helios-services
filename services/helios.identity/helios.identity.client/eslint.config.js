@@ -1,17 +1,34 @@
 import js from "@eslint/js";
 import globals from "globals";
-import tseslint from "typescript-eslint";
+import tseslint, { parser } from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
+import pluginReactHooks  from "eslint-plugin-react-hooks";
+import prettierPlugin from "eslint-plugin-prettier";
+import prettier from "eslint-config-prettier";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
+	js.configs.recommended,
 	{ 
-		files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], 
-		plugins: { js }, 
-		extends: ["js/recommended"], 
+		files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
 		languageOptions: { 
+			parser: tseslint.parser,
+			ecmaVersion: "latest",
 			sourceType: 'module',
 			globals: { ...globals.browser, ...globals.node },
+			parserOptions: {
+        		ecmaFeatures: { jsx: true },
+				projectService: true,
+      		},
+		},
+		plugins: { 
+			prettier: prettierPlugin,
+			react: pluginReact,
+			"react-hooks": pluginReactHooks,
+			'@typescript-eslint': tseslint.plugin,
+		},
+		settings: {
+			react: { version: "detect" }
 		},
 		rules: {
 			// Prettier formatting
@@ -45,6 +62,5 @@ export default defineConfig([
 			'react/jsx-handler-names': ['error', { eventHandlerPrefix: 'handle', eventHandlerPropPrefix: 'on' }],
 		},
 	},
-	tseslint.configs.recommended,
-	pluginReact.configs.flat.recommended,
+	prettier
 ]);

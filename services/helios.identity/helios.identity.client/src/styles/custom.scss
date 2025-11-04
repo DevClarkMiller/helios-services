@@ -1,0 +1,11 @@
+// 1. Override default variables before importing Bootstrap
+$primary: #948979;
+$secondary: #393E46 ;
+$success: #198754;
+$info: #0dcaf0;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: #C4C0BA;
+$dark: #222831;
+
+@import "bootstrap/scss/bootstrap";
