@@ -9,10 +9,14 @@ namespace helios.identity.data {
 
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) {}
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            modelBuilder.Entity<User>()
+                .Property(ul => ul.Id)
+                .HasDefaultValueSql("NEWID()");
+
+            modelBuilder.Entity<UserLogin>()
+                .HasKey(ul => new { ul.UserId, ul.ProviderKey });
+
             modelBuilder.Entity<Provider>().HasData([
                 new Provider { 
                     Id = 1,

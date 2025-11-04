@@ -5,9 +5,9 @@ namespace helios.identity.data {
         [Key]
         public Guid Id { get; set; }
         [MaxLength(255)]
-        public string Email { get; set; } = string.Empty;
-        [MaxLength(100)]
         public string? DisplayName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
 
         [MaxLength(512)]
         public string? PasswordHash { get; set; } // null if using only external login
