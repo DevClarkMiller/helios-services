@@ -36,8 +36,8 @@ const Login = () => {
 				<h3>Glad to have you back</h3>
 			</div>
 
-			<div className="w-100 h-75 d-flex align-items-center justify-content-center flex-grow ">
-				<div className="card p-2 w-75" style={{ maxWidth: '352px' }}>
+			<div className="w-100 h-75 d-flex align-items-center justify-content-center flex-grow">
+				<div className="card p-2 w-75 bg-secondary shadow" style={{ maxWidth: '352px' }}>
 					<div className="card-body">
 						<div className="d-flex justify-content-center gap-1 mb-3">
 							<div className="btn btn-info w-100 btn-icon p-2">
@@ -53,6 +53,7 @@ const Login = () => {
 								<Form.Group className="fw-semibold">
 									<Form.Label hidden>Email Address</Form.Label>
 									<Form.Control
+										className="bg-primary"
 										type="email"
 										placeholder="Enter email"
 										value={formData?.email}
@@ -64,6 +65,7 @@ const Login = () => {
 								<Form.Group className="fw-semibold">
 									<Form.Label hidden>Password</Form.Label>
 									<Form.Control
+										className="bg-primary"
 										type="password"
 										placeholder="Enter password"
 										value={formData?.password}
@@ -73,13 +75,13 @@ const Login = () => {
 								</Form.Group>
 							</div>
 
-							<button className="btn btn-primary w-100 mt-3" type="submit">
+							<button className="btn btn-primary w-100 mt-3 text-light fw-bold" type="submit">
 								Login
 							</button>
 						</form>
 					</div>
 
-					<Link className="p-3 pt-1 text-decoration-none" to="/createAccount">
+					<Link className="p-3 pt-1 text-decoration-none text-light" to="/createAccount">
 						Don't have an account? Sign up
 					</Link>
 				</div>
