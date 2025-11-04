@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 // Icons
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
+import { loginGoogle } from '../../api/login';
 
 interface FormData {
 	email: string;
@@ -40,7 +41,7 @@ const Login = () => {
 				<div className="card p-2 w-75 bg-secondary shadow" style={{ maxWidth: '352px' }}>
 					<div className="card-body">
 						<div className="d-flex justify-content-center gap-1 mb-3">
-							<div className="btn btn-info w-100 btn-icon p-2">
+							<div onClick={loginGoogle} className="btn btn-info w-100 btn-icon p-2">
 								<FaGoogle className="text-white" />
 							</div>
 							<div className="btn btn-info w-100 btn-icon p-2">
