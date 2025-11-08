@@ -13,7 +13,10 @@ function App() {
 
 	// First thing we do on mount is check if the users login token is valid
 	useEffect(() => {
-		if (!token) navigate('/login');
+		if (token == null) {
+			navigate('/login');
+		}
+		localStorage.setItem('token', token as string);
 	}, [token, navigate]);
 
 	return (
