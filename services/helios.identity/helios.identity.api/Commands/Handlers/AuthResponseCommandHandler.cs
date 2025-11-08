@@ -1,20 +1,24 @@
-﻿using MediatR;
-using System.Security.Claims;
-using helios.identity.data;
+﻿using helios.identity.data;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace helios.identity.api.Commands.Handlers {
-    public class AuthResponseCommandHandler : IRequestHandler<AuthResponseCommand, User> {
+    public class AuthResponseCommandHandler : IRequestHandler<AuthResponseCommand, string> {
         private IdentityContext _context;
-        public AuthResponseCommandHandler(IdentityContext identityContext) {
+        IConfiguration _configuration;
+        public AuthResponseCommandHandler(IdentityContext identityContext, IConfiguration configuration) {
             _context = identityContext;
+            _configuration = configuration;
         }
         
-        public async Task<User> Handle(AuthResponseCommand request, CancellationToken cancellationToken) {
+        public async Task<string> Handle(AuthResponseCommand request, CancellationToken cancellationToken) {
             var claims = request.AuthenticationResult.Principal!.Identities.FirstOrDefault()?.Claims;
 
-            var providerKey = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var providerKey = claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             string email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value!;
             string firstName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value!;
             string lastName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value!;
@@ -45,7 +49,8 @@ namespace helios.identity.api.Commands.Handlers {
                     user = new User {
                         FirstName = firstName,
                         LastName = lastName,
-                        LastLoginAt = DateTime.UtcNow
+                        LastLoginAt = DateTime.UtcNow,
+                        CreatedAt = DateTime.UtcNow,
                     };
 
                     await _context.AddAsync(user, cancellationToken);
@@ -64,7 +69,26 @@ namespace helios.identity.api.Commands.Handlers {
                 }
 
                 await transaction.CommitAsync(cancellationToken);
-                return user;
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+
+                var jwtSecret = _configuration.GetSection("AppSettings").GetValue<string>("Secret");
+                var key = Encoding.ASCII.GetBytes(jwtSecret!);
+                var tokenDescriptor = new SecurityTokenDescriptor {
+                    // We only store the users id, the rest of the info can be fetched when needed
+                    Subject = new ClaimsIdentity(new Claim[] { 
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    }),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                        SecurityAlgorithms.HmacSha256Signature
+                    )
+                };
+
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                string returnToken = tokenHandler.WriteToken(token);
+
+                return returnToken;
             } catch {
                 await transaction.RollbackAsync(cancellationToken);
                 throw;

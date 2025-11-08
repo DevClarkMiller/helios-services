@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Route, Routes, useSearchParams, useNavigate } from 'react-router-dom';
+import { auth } from './api/login';
 
 // Components
 import { Container } from 'react-bootstrap';
@@ -13,10 +14,20 @@ function App() {
 
 	// First thing we do on mount is check if the users login token is valid
 	useEffect(() => {
-		if (token == null) {
-			navigate('/login');
-		}
-		localStorage.setItem('token', token as string);
+		// First try auth
+		(async () => {
+			const resp = await auth();
+			if (resp.data != null) {
+				console.log(resp.data);
+				return;
+			}
+
+			if (token != null) {
+				navigate('/login');
+				// localStorage.setItem('token', token as string);
+				// //Validate token is correct, if so return
+			}
+		})();
 	}, [token, navigate]);
 
 	return (
