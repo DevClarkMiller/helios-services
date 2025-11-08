@@ -3,5 +3,3 @@ dotnet ef database update -s .\helios.identity.api -p .\helios.identity.data -c 
 dotnet ef database update 0 -s .\helios.identity.api -p .\helios.identity.data -c IdentityContext -- --environment Development
 dotnet ef migrations list -s .\helios.identity.api -p .\helios.identity.data -c IdentityContext -- --environment Development
 dotnet ef migrations remove -s .\helios.identity.api -p .\helios.identity.data -c IdentityContext -- --environment Development
-
-

@@ -1,4 +1,5 @@
 ﻿using helios.identity.api.Commands;
+using helios.identity.models;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -36,6 +37,14 @@ namespace helios.identity.api.Controllers {
 
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
+
+        //[HttpPost("register")]
+        //[AllowAnonymous]
+        //public IActionResult Register(CreateUserRequest request) {
+        //    var command = new CreateUserCommand.From(request);
+        //    var response = mediator.Send(command);
+        //    return response.ToActionResult();
+        //}
 
         [HttpGet("google-response")]
         [AllowAnonymous]

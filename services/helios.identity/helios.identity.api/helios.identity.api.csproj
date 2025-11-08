@@ -26,11 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Config\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\helios.identity.data\helios.identity.data.csproj" />
+    <ProjectReference Include="..\helios.identity.models\helios.identity.models.csproj" />
   </ItemGroup>
 
 </Project>

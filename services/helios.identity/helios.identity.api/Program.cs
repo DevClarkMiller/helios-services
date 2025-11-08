@@ -1,9 +1,8 @@
+using helios.identity.api.Mappings;
 using helios.identity.data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -31,6 +30,10 @@ namespace helios.identity.api {
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddAutoMapper(options => {
+                options.AddProfile<UserProfile>();
+            });
+
             builder.Services.AddCors(options => {
                 options.AddPolicy("AllowAnyOrigin",
                 builder => {
@@ -48,10 +51,10 @@ namespace helios.identity.api {
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(option => {
-                    option.RequireHttpsMetadata = false;
-                    option.SaveToken = true;
-                    option.TokenValidationParameters = new TokenValidationParameters {
+                .AddJwtBearer(options => {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
@@ -66,7 +69,6 @@ namespace helios.identity.api {
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.CallbackPath = "/signin-google";
                 });
-
 
             var app = builder.Build();
 

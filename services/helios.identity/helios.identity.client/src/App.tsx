@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Route, Routes, useSearchParams, useNavigate } from 'react-router-dom';
 import { auth } from './api/login';
 
@@ -6,6 +6,7 @@ import { auth } from './api/login';
 import { Container } from 'react-bootstrap';
 import Login from './components/Login/Login';
 import Header from './components/Header/Header';
+import { getUser } from './api/user';
 
 function App() {
 	const navigate = useNavigate();
@@ -13,29 +14,38 @@ function App() {
 	const token = searchParams.get('token');
 	const redirectUrl = searchParams.get('redirectUrl');
 
+	const redirectIfAuth = useCallback(async () => {
+		let resp = await auth();
+		const authSuccess = resp.data != null;
+
+		if (!authSuccess) return;
+
+		const user = await getUser();
+		console.log(user);
+
+		if (!redirectUrl) return;
+
+		const url = new URL(redirectUrl);
+		url.searchParams.append('token', resp.data as string);
+		window.location.href = url.toString();
+	}, [redirectUrl]);
+
+	const login = useCallback(async () => {
+		await redirectIfAuth();
+
+		if (token != null) {
+			localStorage.setItem('token', token as string);
+			await redirectIfAuth();
+		} else {
+			navigate('/login');
+		}
+	}, [redirectIfAuth, token, navigate]);
+
 	// First thing we do on mount is check if the users login token is valid
 	useEffect(() => {
 		// First try auth
-		(async () => {
-			let resp = await auth();
-			if (resp.data != null) {
-				console.log(resp.data);
-				return;
-			}
-
-			if (token != null) {
-				localStorage.setItem('token', token as string);
-				resp = await auth();
-				//Validate token is correct, if so return
-				if (resp.data != null) {
-					console.log(resp.data);
-					return;
-				}
-			} else {
-				navigate('/login');
-			}
-		})();
-	}, [token, navigate]);
+		login();
+	}, [login]);
 
 	return (
 		<Container fluid className="app-container bg-dark justify-content-between p-0">
