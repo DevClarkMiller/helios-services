@@ -18,10 +18,12 @@ export const auth = async (): Promise<FetcherData> => {
 		const url = new URL(`${BASE}/auth`);
 		const headers = buildHeaders();
 
-		const response = await fetch(url, { headers: headers });
-		alert(await response);
+		const response = await fetch(url.toString(), { headers: headers });
+		if (response.status == 401) throw new Error('Unauthorized');
+		payload.data = await response.text();
 	} catch (err: unknown) {
 		const errorMessage: string = err instanceof Error ? err.message : 'Unknown error occured';
+		console.log('Error getting auth: ' + errorMessage);
 		payload.error = errorMessage;
 	}
 
@@ -64,7 +66,7 @@ export const auth = async (): Promise<FetcherData> => {
 
 const buildHeaders = (): Headers => {
 	const headers = new Headers();
-	const token = JSON.parse(localStorage.getItem('token') as string);
+	const token = localStorage.getItem('token') as string;
 	if (token) {
 		headers.append('Content-Type', 'application/json');
 		headers.append('Authorization', 'Bearer ' + token);

@@ -11,21 +11,28 @@ function App() {
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 	const token = searchParams.get('token');
+	const redirectUrl = searchParams.get('redirectUrl');
 
 	// First thing we do on mount is check if the users login token is valid
 	useEffect(() => {
 		// First try auth
 		(async () => {
-			const resp = await auth();
+			let resp = await auth();
 			if (resp.data != null) {
 				console.log(resp.data);
 				return;
 			}
 
 			if (token != null) {
+				localStorage.setItem('token', token as string);
+				resp = await auth();
+				//Validate token is correct, if so return
+				if (resp.data != null) {
+					console.log(resp.data);
+					return;
+				}
+			} else {
 				navigate('/login');
-				// localStorage.setItem('token', token as string);
-				// //Validate token is correct, if so return
 			}
 		})();
 	}, [token, navigate]);

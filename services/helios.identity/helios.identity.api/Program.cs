@@ -1,8 +1,11 @@
 using helios.identity.data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace helios.identity.api {
     public class Program {
@@ -28,13 +31,33 @@ namespace helios.identity.api {
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors(options => {
+                options.AddPolicy("AllowAnyOrigin",
+                builder => {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
+            var appSettings = builder.Configuration.GetSection("AppSettings").GetValue<string>("Secret");
+            var key = Encoding.ASCII.GetBytes(appSettings!);
+
             var google = builder.Configuration.GetSection("Authentication:Google");
 
             builder.Services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-            })    
+            })
+                .AddJwtBearer(option => {
+                    option.RequireHttpsMetadata = false;
+                    option.SaveToken = true;
+                    option.TokenValidationParameters = new TokenValidationParameters {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                })
                 // Enable cookie-based authentication
                 .AddCookie()
                 .AddGoogle(options => {
@@ -43,6 +66,7 @@ namespace helios.identity.api {
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.CallbackPath = "/signin-google";
                 });
+
 
             var app = builder.Build();
 
@@ -59,6 +83,8 @@ namespace helios.identity.api {
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseCors("AllowAnyOrigin");
 
             app.UseAuthentication();
             app.UseAuthorization();
