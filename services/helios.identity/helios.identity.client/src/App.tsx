@@ -6,7 +6,6 @@ import { auth } from './api/login';
 import { Container } from 'react-bootstrap';
 import Login from './components/Login/Login';
 import Header from './components/Header/Header';
-import { getUser } from './api/user';
 
 function App() {
 	const navigate = useNavigate();
@@ -19,9 +18,6 @@ function App() {
 		const authSuccess = resp.data != null;
 
 		if (!authSuccess) return;
-
-		const user = await getUser();
-		console.log(user);
 
 		if (!redirectUrl) return;
 
