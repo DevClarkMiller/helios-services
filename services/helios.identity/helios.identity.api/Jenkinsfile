@@ -44,8 +44,7 @@ pipeline {
 
                         sh """
                         docker build \
-                            -t ${imageName}:${imageTag} \
-                            ${SOLUTION_DIR}
+                            -t ${imageName}:${imageTag} 
                         """
                     }
                 }
