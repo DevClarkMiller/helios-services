@@ -29,15 +29,17 @@ pipeline {
         stage('Install Dependencies') {
             when {
                 anyOf {
-                    changeset "${DIR}src/**"
-                    changeset "${DIR}package.json"
-                    changeset "${DIR}package-lock.json"
-                    changeset "${DIR}Jenkinsfile"
+                    changeset "${DIR}/src/**"
+                    changeset "${DIR}/package.json"
+                    changeset "${DIR}/package-lock.json"
+                    changeset "${DIR}/Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
             steps {
-                sh 'npm install'
+                dir("${DIR}") { 
+                    sh 'npm install'
+                }
             }
         }
 
@@ -45,31 +47,35 @@ pipeline {
         stage('Build') {
             when {
                 anyOf {
-                    changeset "${DIR}src/**"
-                    changeset "${DIR}package.json"
-                    changeset "${DIR}package-lock.json"
-                    changeset "${DIR}Jenkinsfile"
+                    changeset "${DIR}/src/**"
+                    changeset "${DIR}/package.json"
+                    changeset "${DIR}/package-lock.json"
+                    changeset "${DIR}/Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
             steps {
-            	sh 'npm run build'
+                dir("${DIR}") {
+                    sh 'npm run build'
+                }
             }
         }
 
         stage('Deploy') {
             when {
                 anyOf {
-                    changeset "${DIR}src/**"
-                    changeset "${DIR}package.json"
-                    changeset "${DIR}package-lock.json"
-                    changeset "${DIR}Jenkinsfile"
+                    changeset "${DIR}/src/**"
+                    changeset "${DIR}/package.json"
+                    changeset "${DIR}/package-lock.json"
+                    changeset "${DIR}/Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
             steps {
-				scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-                updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+                dir("${DIR}") {
+                    scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+                    updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+                }
             }
         }
     }
