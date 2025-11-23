@@ -1,5 +1,7 @@
 @Library('pipeline-lib') _
 
+def serviceDir = sh(script: "dirname ${env.JENKINSFILE}", returnStdout: true).trim()
+
 pipeline {
     agent any
 
@@ -21,10 +23,10 @@ pipeline {
         stage('Install Dependencies') {
             when {
                 anyOf {
-                    changeset '/src/**'
-                    changeset '/package.json'
-                    changeset '/package-lock.json'
-                    changeset 'Jenkinsfile'
+                    changeset "${serviceDir}src/**"
+                    changeset "${serviceDir}package.json"
+                    changeset "${serviceDir}package-lock.json"
+                    changeset "${serviceDir}Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
@@ -36,10 +38,10 @@ pipeline {
         stage('Build') {
             when {
                 anyOf {
-                    changeset '/src/**'
-                    changeset '/package.json'
-                    changeset '/package-lock.json'
-                    changeset 'Jenkinsfile'
+                    changeset "${serviceDir}src/**"
+                    changeset "${serviceDir}package.json"
+                    changeset "${serviceDir}package-lock.json"
+                    changeset "${serviceDir}Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
@@ -51,10 +53,10 @@ pipeline {
         stage('Deploy') {
             when {
                 anyOf {
-                    changeset '/src/**'
-                    changeset '/package.json'
-                    changeset '/package-lock.json'
-                    changeset 'Jenkinsfile'
+                    changeset "${serviceDir}src/**"
+                    changeset "${serviceDir}package.json"
+                    changeset "${serviceDir}package-lock.json"
+                    changeset "${serviceDir}Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
