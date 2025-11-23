@@ -9,11 +9,6 @@ pipeline {
             defaultValue: false,
             description: 'Forces run even if there are no changes'
         )
-        booleanParam(
-            name: 'FORCE_RUN_DEV',
-            defaultValue: false,
-            description: 'Forces run dev even if there are no changes'
-        )
     }
 
     environment {
@@ -37,39 +32,19 @@ pipeline {
                     expression { return params.FORCE_RUN }
                 }
             }
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/dotnet/sdk:8.0'
+                    args '-v $WORKSPACE:/workspace -w /workspace'
+                }
+            }
             steps {
                 dir("${SOLUTION_DIR}") {
-                    sh '''
-                    docker run --rm \
-                        -v $WORKSPACE:/app \
-                        -w /app/services/helios.identity \
-                        helios-identity:latest \
-                        bash -c "export DOTNET_CLI_HOME=/tmp && mkdir -p \$DOTNET_CLI_HOME && dotnet ef database update -s ./helios.identity.api -p ./helios.identity.data -c IdentityContext -- --environment Development"
-                    '''
+                    script {
+                        sh 'dotnet ef database update -s ./helios.identity.api -p ./helios.identity.data -c IdentityContext -- --environment Development'
+                    }
                 }
             }
         }
-
-        // stage('Database Migrations Dev') {
-        //     when {
-        //         anyOf {
-        //             changeset "${DIR}/**"
-        //             expression { return params.FORCE_RUN || params.FORCE_RUN_DEV }
-        //         }
-        //     }
-        //     agent {
-        //         docker {
-        //             image 'mcr.microsoft.com/dotnet/sdk:8.0'
-        //             args '-v $WORKSPACE:/workspace -w /workspace'
-        //         }
-        //     }
-        //     steps {
-        //         dir("${SOLUTION_DIR}") {
-        //             script {
-        //                 sh 'dotnet ef database update -s ./helios.identity.api -p ./helios.identity.data -c IdentityContext -- --environment Development'
-        //             }
-        //         }
-        //     }
-        // }
     }
 }
