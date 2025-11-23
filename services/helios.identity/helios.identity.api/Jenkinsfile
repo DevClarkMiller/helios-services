@@ -33,20 +33,22 @@ pipeline {
                 }
             }
             steps {
-                script {
+                dir("${SOLUTION_DIR}") {
+                    script {
                         def imageName = "helios-identity"
                         def imageTag = "latest"   // or BUILD_NUMBER, git commit hash, etc.
 
                         echo "Building Docker image for ${DIR}..."
                         sh "pwd"
-
+                        
                         sh """
                         docker build \
-                            -f ${DIR}/Dockerfile \
+                            -f .\helios.identity.api\Dockerfile \
                             -t ${imageName}:${imageTag} \
                             .
                         """
                     }
+                }
             }
         }
 
@@ -58,7 +60,7 @@ pipeline {
         //         }
         //     }
         //     steps {
-        //     	sh 'npm run build'
+        //         sh 'npm run build'
         //     }
         // }
 
@@ -71,12 +73,12 @@ pipeline {
         //     }
         //     steps {
         //         withCredentials([
-		// 			string(credentialsId: 'vps-username', variable: 'USERNAME'),
-		// 			string(credentialsId: 'vps-domain', variable: 'DOMAIN')
-		// 		]) {
-		// 			scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-		// 			updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-		// 		}
+        //             string(credentialsId: 'vps-username', variable: 'USERNAME'),
+        //             string(credentialsId: 'vps-domain', variable: 'DOMAIN')
+        //         ]) {
+        //             scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+        //             updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+        //         }
         //     }
         // }
     }
