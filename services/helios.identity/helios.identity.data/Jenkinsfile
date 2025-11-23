@@ -39,15 +39,13 @@ pipeline {
             }
             steps {
                 dir("${SOLUTION_DIR}") {
-                    script {
-                        sh """
-                        docker run --rm \
-                            -v $(pwd):/app \
-                            -w /app/services/helios.identity \
-                            helios-identity:latest \
-                            bash -c "export DOTNET_CLI_HOME=/tmp && mkdir -p \$DOTNET_CLI_HOME && dotnet ef database update -s ./helios.identity.api -p ./helios.identity.data -c IdentityContext -- --environment Development"
-                        """
-                    }
+                    sh '''
+                    docker run --rm \
+                        -v $WORKSPACE:/app \
+                        -w /app/services/helios.identity \
+                        helios-identity:latest \
+                        bash -c "export DOTNET_CLI_HOME=/tmp && mkdir -p \$DOTNET_CLI_HOME && dotnet ef database update -s ./helios.identity.api -p ./helios.identity.data -c IdentityContext -- --environment Development"
+                    '''
                 }
             }
         }
