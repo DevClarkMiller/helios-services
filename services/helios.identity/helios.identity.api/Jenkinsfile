@@ -17,6 +17,13 @@ pipeline {
         DOMAIN = credentials('vps-domain')
     }
 
+    when {
+        anyOf {
+            changeset "${DIR}"
+            expression { return params.FORCE_RUN }
+        }
+    }
+
     stages {
         stage('Checkout') {
             steps {
