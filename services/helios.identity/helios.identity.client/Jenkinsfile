@@ -61,7 +61,7 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy Dev') {
             when {
                 anyOf {
                     changeset "${DIR}/src/**"
@@ -74,7 +74,25 @@ pipeline {
             steps {
                 dir("${DIR}") {
                     scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-                    updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+                    updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca', 'nginx.dev.conf')
+                }
+            }
+        }
+
+        stage('Deploy Prod') {
+            when {
+                anyOf {
+                    changeset "${DIR}/src/**"
+                    changeset "${DIR}/package.json"
+                    changeset "${DIR}/package-lock.json"
+                    changeset "${DIR}/Jenkinsfile"
+                    expression { return params.FORCE_RUN }
+                }
+            }
+            steps {
+                dir("${DIR}") {
+                    scpBuildFilesToWWW(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca')
+                    updateNginxConf(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca', 'nginx.prod.conf')
                 }
             }
         }
