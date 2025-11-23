@@ -44,7 +44,8 @@ pipeline {
 
                         sh """
                         docker build \
-                            -t ${imageName}:${imageTag} 
+                            -t ${imageName}:${imageTag} \
+                            helios.identity.api
                         """
                     }
                 }
