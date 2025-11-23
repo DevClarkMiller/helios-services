@@ -36,11 +36,9 @@ pipeline {
                 dir("${SOLUTION_DIR}") {
                     script {
                         def imageName = "helios-identity"
-                        def imageTag = "latest"   // or BUILD_NUMBER, git commit hash, etc.
+                        def imageTag = "latest"
 
                         echo "Building Docker image for ${DIR}..."
-                        sh "pwd"
-                        
                         sh """
                         docker build \
                             -f ./helios.identity.api/Dockerfile \
