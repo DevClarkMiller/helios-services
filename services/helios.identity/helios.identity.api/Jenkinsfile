@@ -33,9 +33,7 @@ pipeline {
                 }
             }
             steps {
-
-                dir ("${SOLUTION_DIR}") {
-                    script {
+                script {
                         def imageName = "helios-identity"
                         def imageTag = "latest"   // or BUILD_NUMBER, git commit hash, etc.
 
@@ -44,11 +42,11 @@ pipeline {
 
                         sh """
                         docker build \
+                            -f ${DIR}/Dockerfile \
                             -t ${imageName}:${imageTag} \
-                            helios.identity.api
+                            .
                         """
                     }
-                }
             }
         }
 
