@@ -10,6 +10,16 @@ pipeline {
             description: 'Forces run even if there are no changes'
         )
         booleanParam(
+            name: 'FORCE_RUN_DEV',
+            defaultValue: false,
+            description: 'Forces run prod even if there are no changes'
+        )
+        booleanParam(
+            name: 'FORCE_RUN_PROD',
+            defaultValue: false,
+            description: 'Forces run prod even if there are no changes'
+        )
+        booleanParam(
             name: 'FORCE_RUN_UPDATE_NGINX_DEV',
             defaultValue: false,
             description: 'Forces run for update nginx dev step even if there are no changes'
@@ -76,12 +86,12 @@ pipeline {
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
                     expression { return params.FORCE_RUN }
+                    expression { return params.FORCE_RUN_DEV }
                 }
             }
             steps {
                 dir("${DIR}") {
                     scpBuildFilesToWWW(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca')
-                    updateNginxConf(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca', 'nginx.dev.conf')
                 }
             }
         }
@@ -110,12 +120,12 @@ pipeline {
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
                     expression { return params.FORCE_RUN }
+                    expression { return params.FORCE_RUN_PROD }
                 }
             }
             steps {
                 dir("${DIR}") {
                     scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-                    updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca', 'nginx.prod.conf')
                 }
             }
         }
