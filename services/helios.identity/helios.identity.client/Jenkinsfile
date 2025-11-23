@@ -95,8 +95,11 @@ pipeline {
                     expression { return params.FORCE_RUN || params.FORCE_RUN_UPDATE_NGINX_DEV }
                 }
             }
-            dir("${DIR}") {
-                updateNginxConf(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca', 'nginx.dev.conf')
+
+            steps {
+                dir("${DIR}") {
+                    updateNginxConf(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca', 'nginx.dev.conf')
+                }
             }
         }
 
@@ -118,7 +121,7 @@ pipeline {
         }
 
         stage('Update Nginx Prod') {
-             when {
+            when {
                 anyOf {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
@@ -126,8 +129,10 @@ pipeline {
                     expression { return params.FORCE_RUN || params.FORCE_RUN_UPDATE_NGINX_PROD }
                 }
             }
-            dir("${DIR}") {
-                updateNginxConf(USERNAME, DOMAIN, 'prod.helios-identity.qrcool.ca', 'nginx.prod.conf')
+            steps {
+                dir("${DIR}") {
+                    updateNginxConf(USERNAME, DOMAIN, 'prod.helios-identity.qrcool.ca', 'nginx.prod.conf')
+                }
             }
         }
     }
