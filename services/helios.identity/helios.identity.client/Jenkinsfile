@@ -73,8 +73,8 @@ pipeline {
             }
             steps {
                 dir("${DIR}") {
-                    scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-                    updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca', 'nginx.dev.conf')
+                    scpBuildFilesToWWW(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca')
+                    updateNginxConf(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca', 'nginx.dev.conf')
                 }
             }
         }
@@ -91,8 +91,8 @@ pipeline {
             }
             steps {
                 dir("${DIR}") {
-                    scpBuildFilesToWWW(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca')
-                    updateNginxConf(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca', 'nginx.prod.conf')
+                    scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+                    updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca', 'nginx.prod.conf')
                 }
             }
         }
