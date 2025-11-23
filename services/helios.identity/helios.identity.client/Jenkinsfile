@@ -10,9 +10,14 @@ pipeline {
             description: 'Forces run even if there are no changes'
         )
         booleanParam(
-            name: 'FORCE_RUN_UPDATE_NGINX',
+            name: 'FORCE_RUN_UPDATE_NGINX_DEV',
             defaultValue: false,
-            description: 'Forces run for update nginx step even if there are no changes'
+            description: 'Forces run for update nginx dev step even if there are no changes'
+        )
+        booleanParam(
+            name: 'FORCE_RUN_UPDATE_NGINX_PROD',
+            defaultValue: false,
+            description: 'Forces run for update nginx prod step even if there are no changes'
         )
     }
 
@@ -81,6 +86,20 @@ pipeline {
             }
         }
 
+        stage('Update Nginx Dev') {
+             when {
+                anyOf {
+                    changeset "${DIR}/src/**"
+                    changeset "${DIR}/package.json"
+                    changeset "${DIR}/package-lock.json"
+                    expression { return params.FORCE_RUN || params.FORCE_RUN_UPDATE_NGINX_DEV }
+                }
+            }
+            dir("${DIR}") {
+                updateNginxConf(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca', 'nginx.dev.conf')
+            }
+        }
+
         stage('Deploy Prod') {
             when {
                 anyOf {
@@ -98,18 +117,17 @@ pipeline {
             }
         }
 
-        stage('Update Nginx') {
+        stage('Update Nginx Prod') {
              when {
                 anyOf {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    expression { return params.FORCE_RUN }
-                    expression { return params.FORCE_RUN_UPDATE_NGINX }
+                    expression { return params.FORCE_RUN || params.FORCE_RUN_UPDATE_NGINX_PROD }
                 }
             }
             dir("${DIR}") {
-                    updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca', 'nginx.prod.conf')
+                updateNginxConf(USERNAME, DOMAIN, 'prod.helios-identity.qrcool.ca', 'nginx.prod.conf')
             }
         }
     }
