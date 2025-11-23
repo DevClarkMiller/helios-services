@@ -9,6 +9,11 @@ pipeline {
             defaultValue: false,
             description: 'Forces run even if there are no changes'
         )
+        booleanParam(
+            name: 'FORCE_RUN_UPDATE_NGINX',
+            defaultValue: false,
+            description: 'Forces run for update nginx step even if there are no changes'
+        )
     }
 
     environment {
@@ -32,7 +37,6 @@ pipeline {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    changeset "${DIR}/Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
@@ -50,7 +54,6 @@ pipeline {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    changeset "${DIR}/Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
@@ -67,7 +70,6 @@ pipeline {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    changeset "${DIR}/Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
@@ -85,7 +87,6 @@ pipeline {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    changeset "${DIR}/Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
@@ -94,6 +95,21 @@ pipeline {
                     scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
                     updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca', 'nginx.prod.conf')
                 }
+            }
+        }
+
+        stage('Update Nginx') {
+             when {
+                anyOf {
+                    changeset "${DIR}/src/**"
+                    changeset "${DIR}/package.json"
+                    changeset "${DIR}/package-lock.json"
+                    expression { return params.FORCE_RUN }
+                    expression { return params.FORCE_RUN_UPDATE_NGINX }
+                }
+            }
+            dir("${DIR}") {
+                    updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca', 'nginx.prod.conf')
             }
         }
     }
