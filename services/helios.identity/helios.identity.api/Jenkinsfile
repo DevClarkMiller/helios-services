@@ -24,16 +24,26 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Build Docker Image') {
             when {
                 anyOf {
-                    changeset "${DIR}"
+                    changeset "${DIR}/**"
                     expression { return params.FORCE_RUN }
                 }
             }
             steps {
-                sh 'dotnet restore services/helios.identity/helios.identity.sln'
-                sh 'dotnet build services/helios.identity/helios.identity.sln -c Release'
+                script {
+                    def imageName = "helios-identity"
+                    def imageTag = "latest"   // or BUILD_NUMBER, git commit hash, etc.
+
+                    echo "Building Docker image for ${DIR}..."
+
+                    sh """
+                    docker build \
+                        -t ${imageName}:${imageTag} \
+                        ${DIR}
+                    """
+                }
             }
         }
 
