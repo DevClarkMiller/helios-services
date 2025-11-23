@@ -1,7 +1,5 @@
 @Library('pipeline-lib') _
 
-def serviceDir = sh(script: "dirname ${env.JENKINSFILE}", returnStdout: true).trim()
-
 pipeline {
     agent any
 
@@ -13,10 +11,22 @@ pipeline {
         )
     }
 
+    environment {
+        SERVICE_DIR = ""
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
+
+                script {
+                    env.SERVICE_DIR = sh(
+                        script: "git rev-parse --show-prefix",
+                        returnStdout: true
+                    ).trim()
+                }
+                echo "Service directory: ${env.SERVICE_DIR}"
             }
         }
 
