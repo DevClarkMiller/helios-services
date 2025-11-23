@@ -12,7 +12,9 @@ pipeline {
     }
 
     environment {
-        SERVICE_DIR = ""
+        DIR = 'services/helios.identity/helios.identity.client'
+        USERNAME = credentials('vps-username')
+        DOMAIN = credentials('vps-domain')
     }
 
     stages {
@@ -20,23 +22,17 @@ pipeline {
             steps {
                 checkout scm
 
-                script {
-                    env.SERVICE_DIR = sh(
-                        script: "git rev-parse --show-prefix",
-                        returnStdout: true
-                    ).trim()
-                }
-                echo "Service directory: ${env.SERVICE_DIR}"
+                echo "WORKING DIR: ${DIR}"
             }
         }
 
         stage('Install Dependencies') {
             when {
                 anyOf {
-                    changeset "${serviceDir}src/**"
-                    changeset "${serviceDir}package.json"
-                    changeset "${serviceDir}package-lock.json"
-                    changeset "${serviceDir}Jenkinsfile"
+                    changeset "${DIR}src/**"
+                    changeset "${DIR}package.json"
+                    changeset "${DIR}package-lock.json"
+                    changeset "${DIR}Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
@@ -45,13 +41,14 @@ pipeline {
             }
         }
 
+ 
         stage('Build') {
             when {
                 anyOf {
-                    changeset "${serviceDir}src/**"
-                    changeset "${serviceDir}package.json"
-                    changeset "${serviceDir}package-lock.json"
-                    changeset "${serviceDir}Jenkinsfile"
+                    changeset "${DIR}src/**"
+                    changeset "${DIR}package.json"
+                    changeset "${DIR}package-lock.json"
+                    changeset "${DIR}Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
@@ -63,21 +60,16 @@ pipeline {
         stage('Deploy') {
             when {
                 anyOf {
-                    changeset "${serviceDir}src/**"
-                    changeset "${serviceDir}package.json"
-                    changeset "${serviceDir}package-lock.json"
-                    changeset "${serviceDir}Jenkinsfile"
+                    changeset "${DIR}src/**"
+                    changeset "${DIR}package.json"
+                    changeset "${DIR}package-lock.json"
+                    changeset "${DIR}Jenkinsfile"
                     expression { return params.FORCE_RUN }
                 }
             }
             steps {
-                withCredentials([
-					string(credentialsId: 'vps-username', variable: 'USERNAME'),
-					string(credentialsId: 'vps-domain', variable: 'DOMAIN')
-				]) {
-					scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-					updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-				}
+				scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+                updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
             }
         }
     }
