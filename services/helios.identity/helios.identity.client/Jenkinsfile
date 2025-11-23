@@ -18,61 +18,55 @@ pipeline {
             }
         }
 
-        stage('test') {
+        stage('Install Dependencies') {
+            when {
+                anyOf {
+                    changeset '/src/**'
+                    changeset '/package.json'
+                    changeset '/package-lock.json'
+                    changeset 'Jenkinsfile'
+                    expression { return params.FORCE_RUN }
+                }
+            }
             steps {
-                sh 'echo "hello world"'   
+                sh 'npm install'
             }
         }
 
-        // stage('Install Dependencies') {
-        //     when {
-        //         anyOf {
-        //             changeset '/src/**'
-        //             changeset '/package.json'
-        //             changeset '/package-lock.json'
-        //             changeset 'Jenkinsfile'
-        //             expression { return params.FORCE_RUN }
-        //         }
-        //     }
-        //     steps {
-        //         sh 'npm install'
-        //     }
-        // }
+        stage('Build') {
+            when {
+                anyOf {
+                    changeset '/src/**'
+                    changeset '/package.json'
+                    changeset '/package-lock.json'
+                    changeset 'Jenkinsfile'
+                    expression { return params.FORCE_RUN }
+                }
+            }
+            steps {
+            	sh 'npm run build'
+            }
+        }
 
-        // stage('Build') {
-        //     when {
-        //         anyOf {
-        //             changeset '/src/**'
-        //             changeset '/package.json'
-        //             changeset '/package-lock.json'
-        //             changeset 'Jenkinsfile'
-        //             expression { return params.FORCE_RUN }
-        //         }
-        //     }
-        //     steps {
-        //     	sh 'npm run build'
-        //     }
-        // }
-
-        // stage('Deploy') {
-        //     when {
-        //         anyOf {
-        //             changeset '/src/**'
-        //             changeset '/package.json'
-        //             changeset '/package-lock.json'
-        //             changeset 'Jenkinsfile'
-        //             expression { return params.FORCE_RUN }
-        //         }
-        //     }
-        //     steps {
-        //         withCredentials([
-		// 			string(credentialsId: 'vps-username', variable: 'USERNAME'),
-		// 			string(credentialsId: 'vps-domain', variable: 'DOMAIN')
-		// 		]) {
-		// 			scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-		// 			updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-		// 		}
-        //     }
-        // }
+        stage('Deploy') {
+            when {
+                anyOf {
+                    changeset '/src/**'
+                    changeset '/package.json'
+                    changeset '/package-lock.json'
+                    changeset 'Jenkinsfile'
+                    expression { return params.FORCE_RUN }
+                }
+            }
+            steps {
+                withCredentials([
+					string(credentialsId: 'vps-username', variable: 'USERNAME'),
+					string(credentialsId: 'vps-domain', variable: 'DOMAIN')
+				]) {
+					scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+					updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+				}
+            }
+        }
     }
 }
