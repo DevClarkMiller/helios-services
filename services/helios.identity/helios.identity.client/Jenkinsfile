@@ -131,7 +131,7 @@ pipeline {
             }
             steps {
                 dir("${DIR}") {
-                    updateNginxConf(USERNAME, DOMAIN, 'prod.helios-identity.qrcool.ca', 'nginx.prod.conf')
+                    updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca', 'nginx.prod.conf')
                 }
             }
         }
