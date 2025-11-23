@@ -40,6 +40,7 @@ pipeline {
                         def imageTag = "latest"   // or BUILD_NUMBER, git commit hash, etc.
 
                         echo "Building Docker image for ${DIR}..."
+                        sh "pwd"
 
                         sh """
                         docker build \
