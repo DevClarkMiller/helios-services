@@ -29,63 +29,33 @@ pipeline {
             steps {
                 dir("${DIR}") {
                     loadAppsettings('helios.identity.api', 'Development')
+                    loadAppsettings('helios.identity.api', 'Production')
                 }
             }
         }
 
         stage('Build Docker Image') {
-            when {
-                anyOf {
-                    changeset "${DIR}/**"
-                    expression { return params.FORCE_RUN }
-                }
-            }
             steps {
                 dir("${SOLUTION_DIR}") {
-                    script {
-                        def imageName = "helios-identity"
-                        def imageTag = "latest"
-
-                        echo "Building Docker image for ${DIR}..."
-                        sh """
-                        docker build \
-                            -f ./helios.identity.api/Dockerfile \
-                            -t ${imageName}:${imageTag} \
-                            .
-                        """
-                    }
+                    echo "Building Docker image for ${DIR}..."
+                    buildDockerImage('./helios.identity.api/Dockerfile', 'helios-identity', 'latest')
                 }
             }
         }
 
-        // stage('Build') {
-        //     when {
-        //         anyOf {
-        //             changeset "${DIR}"
-        //             expression { return params.FORCE_RUN }
-        //         }
-        //     }
-        //     steps {
-        //         sh 'npm run build'
-        //     }
-        // }
+        // DO THIS WHEN MULTIPLE SERVERS ARE PRESENT, ALSO FIND BETTER METHOD
+        // stage('Transfer docker image'){}
 
-        // stage('Deploy') {
-        //     when {
-        //         anyOf {
-        //             changeset "${DIR}"
-        //             expression { return params.FORCE_RUN }
-        //         }
-        //     }
-        //     steps {
-        //         withCredentials([
-        //             string(credentialsId: 'vps-username', variable: 'USERNAME'),
-        //             string(credentialsId: 'vps-domain', variable: 'DOMAIN')
-        //         ]) {
-        //             scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-        //             updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
-        //         }
-        //     }
-        // }
+        stage('Deploy Dev') {
+            when { 
+                anyOf {
+                    changeset "docker-compose.yml"
+                }
+            }
+
+            steps {
+                sh 'ssh sys1.clarkmiller.ca "docker compose stop qrcool ; docker compose rm -f qrcool; docker compose up -d qrcool"'
+            }
+        }
     }
 }
