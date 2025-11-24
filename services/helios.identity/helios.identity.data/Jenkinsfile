@@ -43,16 +43,16 @@ pipeline {
             steps {
                 dir("${SOLUTION_DIR}") {
                     sh """
-            docker run --rm \
-              -v "\$WORKSPACE:/workspace" \
-              -w /workspace \
-              mcr.microsoft.com/dotnet/sdk:9.0 \
-              bash -c "dotnet tool install --global dotnet-ef --version 9.0.0-* && \
-                       export PATH=\\\$PATH:/root/.dotnet/tools && \
-                       dotnet ef migrations list -s ./services/helios.identity/helios.identity.api \
-                       -p ./services/helios.identity/helios.identity.data \
-                       -c IdentityContext -- --environment Development"
-            """
+                    docker run --rm \
+                    -v "\$WORKSPACE:/workspace" \
+                    -w /workspace \
+                    mcr.microsoft.com/dotnet/sdk:9.0 \
+                    bash -c "dotnet tool install --global dotnet-ef --version 9.0.0-* && \
+                            export PATH=\\\$PATH:/root/.dotnet/tools && \
+                            dotnet ef migrations list -s ./services/helios.identity/helios.identity.api \
+                            -p ./services/helios.identity/helios.identity.data \
+                            -c IdentityContext -- --environment Development"
+                    """
                 }
             }
         }
