@@ -3,14 +3,6 @@
 pipeline {
     agent any
 
-    parameters {
-        booleanParam(
-            name: 'FORCE_RUN',
-            defaultValue: false,
-            description: 'Forces run even if there are no changes'
-        )
-    }
-
     environment {
         SOLUTION_DIR = 'services/helios.identity'
         DIR = 'services/helios.identity/helios.identity.data'
