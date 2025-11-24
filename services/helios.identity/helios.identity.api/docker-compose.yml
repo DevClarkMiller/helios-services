@@ -1,0 +1,19 @@
+services:
+  dev-helios-idenity:
+    image: helios-identity:latest
+    container_name: dev-helios-identity
+    ports:
+      - "6412:8080"
+      - "6413:8081"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    restart: on-failure
+  prod-helios-idenity:
+    image: helios-identity:latest
+    container_name: prod-helios-identity
+    ports:
+      - "6414:8080"
+      - "6415:8081"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+    restart: on-failure

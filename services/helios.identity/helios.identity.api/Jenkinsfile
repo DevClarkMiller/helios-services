@@ -47,14 +47,9 @@ pipeline {
         // stage('Transfer docker image'){}
 
         stage('Deploy Dev') {
-            when { 
-                anyOf {
-                    changeset "docker-compose.yml"
-                }
-            }
-
             steps {
-                sh 'ssh sys1.clarkmiller.ca "docker compose stop qrcool ; docker compose rm -f qrcool; docker compose up -d qrcool"'
+				sh 'scp docker-compose.yml sys1.clarkmiller.ca:/home/miller/helios-identity'
+                sh 'ssh sys1.clarkmiller.ca "cd helios-identity && sudo docker compose up -d"'
             }
         }
     }
