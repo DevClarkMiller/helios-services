@@ -22,14 +22,14 @@ pipeline {
                 checkout scm
 
                 script {
-                    services = [
+                    def services = [
                         'helios.services.identity.api': 'services/helios.identity/helios.identity.api',
                         'helios.services.identity.client': 'services/helios.identity/helios.identity.client',
                         'helios.services.identity.data': 'services/helios.identity/helios.identity.data'
                     ]
 
-                    toTrigger = [:] // Map of service -> pipelines
-                    microservices.each { service, info ->
+                    def toTrigger = [:] // Map of service -> pipelines
+                    services.each { service, info ->
                         def path = info[0]
                         def servicePipelines = info.pipelines
                         if (params.FORCE_RUN || checkMicroservice(path)) {
@@ -43,17 +43,8 @@ pipeline {
                     if (toTrigger.isEmpty()) {
                         echo "No services changed. Nothing to trigger."
                     }
-                }
-            }
-        }
 
-        stage('Trigger Pipelines') {
-            when {
-                expression { return !toTrigger.isEmpty() }
-            }
-            steps {
-                script {
-                    toTrigger.each { service -> 
+                     toTrigger.each { service -> 
                         echo "Triggering ${service}..."
                         build job: service,
                                 parameters: [
@@ -65,5 +56,24 @@ pipeline {
                 }
             }
         }
+
+        // stage('Trigger Pipelines') {
+        //     when {
+        //         expression { return !toTrigger.isEmpty() }
+        //     }
+        //     steps {
+        //         script {
+        //             toTrigger.each { service -> 
+        //                 echo "Triggering ${service}..."
+        //                 build job: service,
+        //                         parameters: [
+        //                             booleanParam(name: 'FORCE_RUN', value: params.FORCE_RUN)
+        //                         ],
+        //                         wait: true // set false for async
+        //                 echo "${service} finished."
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
