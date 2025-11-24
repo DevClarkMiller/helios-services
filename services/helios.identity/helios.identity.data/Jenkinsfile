@@ -8,6 +8,10 @@ pipeline {
         DIR = 'services/helios.identity/helios.identity.data'
         USERNAME = credentials('vps-username')
         DOMAIN = credentials('vps-domain')
+        PROJECT_NAME = 'helios.identity'
+        CONTEXT_NAME = 'IdentityContext'
+        DOTNET_VERSION = '9.0'
+        EF_VERSION = '9.0.0-*'
     }
 
     stages {
@@ -21,6 +25,7 @@ pipeline {
             steps {
                 dir("services/helios.identity/helios.identity.api") {
                     loadAppsettings('helios.identity.api', 'Development')
+                    loadAppsettings('helios.identity.api', 'Production')
                 }
             }
         }
@@ -28,7 +33,15 @@ pipeline {
         stage('Database Migrations Dev') {
             steps {
                 dir("${SOLUTION_DIR}") {
-                    updateDBFromMigration('helios.identity', 'IdentityContext', '9.0', '9.0.0-*')
+                    updateDBFromMigration("${PROJECT_NAME}", "${CONTEXT_NAME}", "${DOTNET_VERSION}", "${EF_VERSION}", 'Development')
+                }
+            }
+        }
+
+        stage('Database Migrations Prod') {
+            steps {
+                dir("${SOLUTION_DIR}") {
+                    updateDBFromMigration("${PROJECT_NAME}", "${CONTEXT_NAME}", "${DOTNET_VERSION}", "${EF_VERSION}", 'Production')
                 }
             }
         }
