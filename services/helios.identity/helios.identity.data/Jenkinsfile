@@ -44,7 +44,6 @@ pipeline {
                 dir("${SOLUTION_DIR}") {
                     runAndDeleteContainerCommand('mcr.microsoft.com/dotnet/sdk:9.0',
                         """
-                        bash -c \"
                         dotnet tool install --global dotnet-ef --version 9.0.0-* && \
                         export PATH=\\\$PATH:/root/.dotnet/tools && \
                         dotnet ef migrations list -s ./services/helios.identity/helios.identity.api \
