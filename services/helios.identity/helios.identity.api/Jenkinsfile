@@ -25,6 +25,10 @@ pipeline {
             }
         }
 
+        stage('Load secrets') {
+            loadAppsettings('helios.identity.api', 'Development')
+        }
+
         stage('Build Docker Image') {
             when {
                 anyOf {
