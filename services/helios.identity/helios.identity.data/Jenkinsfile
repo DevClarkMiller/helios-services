@@ -32,17 +32,14 @@ pipeline {
                     expression { return params.FORCE_RUN }
                 }
             }
-            agent {
-                docker {
-                    image 'mcr.microsoft.com/dotnet/sdk:8.0'
-                    args '-v $WORKSPACE:/workspace -w /workspace'
-                }
-            }
             steps {
                 dir("${SOLUTION_DIR}") {
-                    script {
-                        sh 'dotnet ef database update -s ./helios.identity.api -p ./helios.identity.data -c IdentityContext -- --environment Development'
-                    }
+                    runAndDeleteContainerCommand('mcr.microsoft.com/dotnet/sdk:9.0', 
+                    '''
+                    dotnet tool install --global dotnet-ef --version 9.0.0-* && export PATH="$PATH:/root/.dotnet/tools" && \
+                    dotnet ef migrations list -s ./helios.identity.api -p ./helios.identity.data -c IdentityContext -- --environment Development
+                    '''
+                    )
                 }
             }
         }
