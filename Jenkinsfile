@@ -30,7 +30,8 @@ pipeline {
 
                     def toTrigger = []
                     services.each { service, path ->
-                        if (params.FORCE_RUN || checkMicroservice(path)) {
+                        // if (params.FORCE_RUN || checkMicroservice(path)) {
+                        if (params.FORCE_RUN) {
                             echo "Changes detected in ${service}, will trigger pipelines."
                             toTrigger << service // Add to the list
                         } else {
