@@ -27,7 +27,9 @@ pipeline {
 
         stage('Load secrets') {
             steps {
-                loadAppsettings('helios.identity.api', 'Development')
+                dir("${DIR}") {
+                    loadAppsettings('helios.identity.api', 'Development')
+                }
             }
         }
 
