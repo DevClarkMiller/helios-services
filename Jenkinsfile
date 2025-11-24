@@ -17,7 +17,7 @@ pipeline {
     }
 
     stages {
-        stage('Determine Changes') {
+        stage('Determine Changes and run pipelines') {
             steps {
                 checkout scm
 
@@ -30,8 +30,7 @@ pipeline {
 
                     def toTrigger = []
                     services.each { service, path ->
-                        // if (params.FORCE_RUN || checkMicroservice(path)) {
-                        if (params.FORCE_RUN) {
+                        if (params.FORCE_RUN || checkMicroservice(path)) {
                             echo "Changes detected in ${service}, will trigger pipelines."
                             toTrigger << service // Add to the list
                         } else {
@@ -42,16 +41,7 @@ pipeline {
                     if (toTrigger.isEmpty()) {
                         echo "No services changed. Nothing to trigger."
                     }
-                }
-            }
-        }
 
-        stage('Trigger Pipelines') {
-            when {
-                expression { return !toTrigger.isEmpty() }
-            }
-            steps {
-                script {
                     toTrigger.each { service -> 
                         echo "Triggering ${service}..."
                         build job: service,
