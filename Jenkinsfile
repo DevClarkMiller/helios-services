@@ -1,0 +1,69 @@
+@Library('pipeline-lib') _
+
+pipeline {
+    agent any
+
+    parameters {
+        booleanParam(
+            name: 'FORCE_RUN',
+            defaultValue: false,
+            description: 'Forces run even if there are no changes'
+        )
+    }
+
+    environment {
+        USERNAME = credentials('vps-username')
+        DOMAIN = credentials('vps-domain')
+    }
+
+    stages {
+        stage('Determine Changes') {
+            steps {
+                checkout scm
+
+                script {
+                    services = [
+                        'helios.services.identity.api': 'services/helios.identity/helios.identity.api',
+                        'helios.services.identity.client': 'services/helios.identity/helios.identity.client',
+                        'helios.services.identity.data': 'services/helios.identity/helios.identity.data'
+                    ]
+
+                    toTrigger = [:] // Map of service -> pipelines
+                    microservices.each { service, info ->
+                        def path = info[0]
+                        def servicePipelines = info.pipelines
+                        if (params.FORCE_RUN || checkMicroservice(path)) {
+                            echo "Changes detected in ${service}, will trigger pipelines: ${servicePipelines}"
+                            toTrigger[service] = servicePipelines
+                        } else {
+                            echo "No changes in ${service}, skipping."
+                        }
+                    }
+
+                    if (toTrigger.isEmpty()) {
+                        echo "No services changed. Nothing to trigger."
+                    }
+                }
+            }
+        }
+
+        stage('Trigger Pipelines') {
+            when {
+                expression { return !toTrigger.isEmpty() }
+            }
+            steps {
+                script {
+                    toTrigger.each { service -> 
+                        echo "Triggering ${service}..."
+                        build job: service,
+                                parameters: [
+                                    booleanParam(name: 'FORCE_RUN', value: params.FORCE_RUN)
+                                ],
+                                wait: true // set false for async
+                        echo "${service} finished."
+                    }
+                }
+            }
+        }
+    }
+}
