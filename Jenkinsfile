@@ -42,8 +42,17 @@ pipeline {
                     if (toTrigger.isEmpty()) {
                         echo "No services changed. Nothing to trigger."
                     }
+                }
+            }
+        }
 
-                     toTrigger.each { service -> 
+        stage('Trigger Pipelines') {
+            when {
+                expression { return !toTrigger.isEmpty() }
+            }
+            steps {
+                script {
+                    toTrigger.each { service -> 
                         echo "Triggering ${service}..."
                         build job: service,
                                 parameters: [
@@ -55,24 +64,5 @@ pipeline {
                 }
             }
         }
-
-        // stage('Trigger Pipelines') {
-        //     when {
-        //         expression { return !toTrigger.isEmpty() }
-        //     }
-        //     steps {
-        //         script {
-        //             toTrigger.each { service -> 
-        //                 echo "Triggering ${service}..."
-        //                 build job: service,
-        //                         parameters: [
-        //                             booleanParam(name: 'FORCE_RUN', value: params.FORCE_RUN)
-        //                         ],
-        //                         wait: true // set false for async
-        //                 echo "${service} finished."
-        //             }
-        //         }
-        //     }
-        // }
     }
 }
