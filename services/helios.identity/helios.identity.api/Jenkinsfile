@@ -48,8 +48,10 @@ pipeline {
 
         stage('Deploy Dev') {
             steps {
-				sh 'scp docker-compose.yml sys1.clarkmiller.ca:/home/miller/helios-identity'
-                sh 'ssh sys1.clarkmiller.ca "cd helios-identity && sudo docker compose up -d"'
+				dir("${DIR}") { 
+					sh 'scp docker-compose.yml sys1.clarkmiller.ca:/home/miller/helios-identity'
+                	sh 'ssh sys1.clarkmiller.ca "cd helios-identity && sudo docker compose up -d"'
+				}
             }
         }
     }
