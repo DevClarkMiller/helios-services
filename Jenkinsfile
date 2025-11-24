@@ -39,21 +39,19 @@ pipeline {
                         }
                     }
 
-                    echo "Services to trigger: ${toTrigger}"
+                    if (toTrigger.isEmpty()) {
+                        echo "No services changed. Nothing to trigger."
+                    }
 
-                    // if (toTrigger.isEmpty()) {
-                    //     echo "No services changed. Nothing to trigger."
-                    // }
-
-                    //  toTrigger.each { service -> 
-                    //     echo "Triggering ${service}..."
-                    //     build job: service,
-                    //             parameters: [
-                    //                 booleanParam(name: 'FORCE_RUN', value: params.FORCE_RUN)
-                    //             ],
-                    //             wait: true // set false for async
-                    //     echo "${service} finished."
-                    // }
+                     toTrigger.each { service -> 
+                        echo "Triggering ${service}..."
+                        build job: service,
+                                parameters: [
+                                    booleanParam(name: 'FORCE_RUN', value: params.FORCE_RUN)
+                                ],
+                                wait: true // set false for async
+                        echo "${service} finished."
+                    }
                 }
             }
         }
