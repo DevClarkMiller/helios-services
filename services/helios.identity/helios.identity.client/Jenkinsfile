@@ -42,7 +42,15 @@ pipeline {
             steps {
                 checkout scm
 
-                echo "WORKING DIR: ${DIR}"
+                script {
+                    def hasChanges = params.FORCE_RUN || checkMicroservice("${DIR}")
+
+                    if (!hasChanges) {
+                        echo "No changes detected in ${DIR}. Exiting pipeline early."
+                        currentBuild.result = 'SUCCESS'
+                        return // Stops the pipeline from executing further stages
+                    }
+                }
             }
         }
 
