@@ -25,6 +25,14 @@ pipeline {
             }
         }
 
+        stage('Load secrets') {
+            steps {
+                dir("services/helios.identity/helios.identity.api") {
+                    loadAppsettings('helios.identity.api', 'Development')
+                }
+            }
+        }
+
         stage('Database Migrations Dev') {
             when {
                 anyOf {
