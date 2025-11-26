@@ -50,7 +50,7 @@ pipeline {
             steps {
 				dir("${DIR}") { 
 					sh 'scp docker-compose.yml miller@sys1.clarkmiller.ca:/home/miller/helios-identity'
-                	sh 'ssh miller@sys1.clarkmiller.ca "cd helios-identity && sudo docker compose up -d"'
+                	sh 'ssh miller@sys1.clarkmiller.ca "cd helios-identity && docker compose up -d"'
 				}
             }
         }
