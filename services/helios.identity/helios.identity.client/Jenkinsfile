@@ -57,7 +57,7 @@ pipeline {
                 dir("${DIR}") { 
                     sh 'npm install'
 					loadEnvFile('helios.identity', 'client', 'development')
-					loadEnvFile('helios.identity', 'production', 'production')
+					loadEnvFile('helios.identity', 'client', 'production')
                 }
             }
         }
