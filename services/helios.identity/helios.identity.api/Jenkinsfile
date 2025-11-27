@@ -83,8 +83,23 @@ pipeline {
 			}
             steps {
 				dir("${DIR}") { 
-					sh 'scp docker-compose.yml miller@sys1.clarkmiller.ca:/home/miller/helios-identity'
-                	sh 'ssh miller@sys1.clarkmiller.ca "cd helios-identity && docker compose up -d"'
+					sh 'scp docker-compose.yml miller@sys1.clarkmiller.ca:/home/miller/helios-identity/docker-compose-dev'
+                	sh 'ssh miller@sys1.clarkmiller.ca "cd helios-identity/dev && docker compose up -d"'
+				}
+            }
+        }
+
+		stage('Deploy Prod') {
+			when {
+				anyOf {
+					changeset "${DIR}/**"
+					expression { return params.All || params.Prod }
+				}
+			}
+            steps {
+				dir("${DIR}") { 
+					sh 'scp docker-compose.yml miller@sys1.clarkmiller.ca:/home/miller/helios-identity/docker-compose-prod'
+                	sh 'ssh miller@sys1.clarkmiller.ca "cd helios-identity/prod && docker compose up -d"'
 				}
             }
         }
