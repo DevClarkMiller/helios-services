@@ -83,7 +83,7 @@ pipeline {
 			}
             steps {
 				dir("${DIR}") { 
-					sh 'scp docker-compose.yml miller@sys1.clarkmiller.ca:/home/miller/helios-identity/docker-compose-dev'
+					sh 'scp docker-compose-dev.yml miller@sys1.clarkmiller.ca:/home/miller/helios-identity/dev/docker-compose.yml'
                 	sh 'ssh miller@sys1.clarkmiller.ca "cd helios-identity/dev && docker compose up -d"'
 				}
             }
@@ -98,7 +98,7 @@ pipeline {
 			}
             steps {
 				dir("${DIR}") { 
-					sh 'scp docker-compose.yml miller@sys1.clarkmiller.ca:/home/miller/helios-identity/docker-compose-prod'
+					sh 'scp docker-compose-prod.yml miller@sys1.clarkmiller.ca:/home/miller/helios-identity/prod/docker-compose.yml'
                 	sh 'ssh miller@sys1.clarkmiller.ca "cd helios-identity/prod && docker compose up -d"'
 				}
             }

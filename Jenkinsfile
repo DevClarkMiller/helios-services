@@ -53,6 +53,8 @@ pipeline {
                     if (toTrigger.isEmpty()) {
                         echo "No services changed. Nothing to trigger."
                     }
+					
+					// TODO: ENSURE THIS PIPELINE DOESNT WAIT FOR THESE JOBS TO FINISH
 
                     toTrigger.each { service -> 
                         echo "Triggering ${service}..."
