@@ -44,10 +44,10 @@ pipeline {
         }
 
         stage('Load secrets') {
-            steps {
-				when { 
-					expression { return params.All || params.Dev || params.Prod }	
-				}
+            when { 
+				sexpression { return params.All || params.Dev || params.Prod }	
+			}
+			steps {
                 dir("${DIR}") {
                     loadAppsettings('helios.identity.api', 'Development')
                     loadAppsettings('helios.identity.api', 'Production')
@@ -56,12 +56,12 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            steps {
-				when {
-					anyOf {
-						expression { return params.All || params.Dev || params.Prod }	
-					}
+            when {
+				anyOf {
+					expression { return params.All || params.Dev || params.Prod }	
 				}
+			}
+			steps {
                 dir("${SOLUTION_DIR}") {
                     echo "Building Docker image for ${DIR}..."
                     buildDockerImage('./helios.identity.api/Dockerfile', 'helios-identity', 'latest')
