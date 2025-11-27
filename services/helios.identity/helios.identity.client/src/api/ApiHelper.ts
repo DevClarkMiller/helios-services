@@ -11,7 +11,7 @@ export const buildHeaders = (): Headers => {
 };
 
 export const buildUrl = (url: string): URL => {
-	return new URL(`${window.location.href}${url}`);
+	return new URL(`${window.location.origin}${url}`);
 };
 
 export interface FetcherData {
