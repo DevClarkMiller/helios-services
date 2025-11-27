@@ -45,7 +45,7 @@ pipeline {
 
         stage('Load secrets') {
             when { 
-				sexpression { return params.All || params.Dev || params.Prod }	
+				expression { return params.All || params.Dev || params.Prod }	
 			}
 			steps {
                 dir("${DIR}") {
