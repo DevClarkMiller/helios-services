@@ -5,10 +5,22 @@ pipeline {
 
     parameters {
         booleanParam(
-            name: 'FORCE_RUN',
+            name: 'All',
             defaultValue: false,
-            description: 'Forces run even if there are no changes'
+            description: 'Run all even if there are no changes'
         )
+
+		booleanParam(
+			name: 'Dev',
+			defaultValue: false,
+			description: 'Run dev even if there are no changes'
+		)
+
+		booleanParam(
+			name: 'Prod',
+			defaultValue: false,
+			description: 'Run prod even if there are no changes'
+		)
     }
 
     environment {
@@ -46,7 +58,9 @@ pipeline {
                         echo "Triggering ${service}..."
                         build job: service,
                                 parameters: [
-                                    booleanParam(name: 'All', value: params.All)
+                                    booleanParam(name: 'All', value: params.All),
+									booleanParam(name: 'Dev', value: params.Dev),
+									booleanParam(name: 'Prod', value: params.Prod)
                                 ],
                                 wait: true // set false for async
                         echo "${service} finished."
