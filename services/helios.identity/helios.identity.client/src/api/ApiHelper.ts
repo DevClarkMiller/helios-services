@@ -11,9 +11,7 @@ export const buildHeaders = (): Headers => {
 };
 
 export const buildUrl = (url: string): URL => {
-	if (window.location.href.includes('localhost')) return new URL(`https://localhost:7022${url}`);
-	console.log(url);
-	return new URL(url);
+	return new URL(`${window.location.href}${url}`);
 };
 
 export interface FetcherData {
