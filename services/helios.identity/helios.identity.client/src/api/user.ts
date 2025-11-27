@@ -4,7 +4,7 @@ export const getUser = async (): Promise<unknown> => {
 	const payload: FetcherData = {};
 
 	try {
-		const url = buildUrl('/user');
+		const url = buildUrl('/api/identity/user');
 		const headers = buildHeaders();
 
 		const response = await fetch(url.toString(), { headers: headers });

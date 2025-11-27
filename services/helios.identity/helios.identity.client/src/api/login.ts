@@ -1,7 +1,7 @@
 import { buildHeaders, buildUrl, type FetcherData } from './ApiHelper';
 
 export const loginGoogle = async () => {
-	const url = buildUrl('/auth/login-google');
+	const url = buildUrl('/api/identity/auth/login-google');
 	url.searchParams.append('returnUrl', window.location.href);
 	window.location.href = url.toString();
 };
@@ -10,7 +10,7 @@ export const auth = async (): Promise<FetcherData> => {
 	const payload: FetcherData = {};
 
 	try {
-		const url = buildUrl('/auth');
+		const url = buildUrl('/api/identity/auth');
 		const headers = buildHeaders();
 
 		const response = await fetch(url.toString(), { headers: headers });
