@@ -67,7 +67,7 @@ namespace helios.identity.api {
                     options.ClientId = google["ClientId"]!;
                     options.ClientSecret = google["ClientSecret"]!;
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.CallbackPath = "/signin-google";
+                    options.CallbackPath = "/api/identity/signin-google";
                 });
 
             var app = builder.Build();

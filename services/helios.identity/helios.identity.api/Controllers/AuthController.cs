@@ -1,5 +1,4 @@
 ﻿using helios.identity.api.Commands;
-using helios.identity.models;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
