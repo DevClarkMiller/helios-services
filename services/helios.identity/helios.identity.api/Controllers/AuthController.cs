@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Security.Claims;
 
 namespace helios.identity.api.Controllers {
-    [Route("api/[controller]")]
+    [Route("api/identity/[controller]")]
     [Authorize]
     [ApiController]
     public class AuthController(IMediator mediator) : ControllerBase {
