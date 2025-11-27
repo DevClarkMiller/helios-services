@@ -77,11 +77,20 @@ namespace helios.identity.api {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment()) {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwagger(c =>
+            {
+                // This changes the JSON endpoint
+                c.RouteTemplate = "api/identity/swagger/{documentName}/swagger.json";
+            });
+
+            app.UseSwaggerUI(c =>
+            {
+                // This changes the UI path
+                c.SwaggerEndpoint("/api/identity/swagger/v1/swagger.json", "My API V1");
+
+                // Serve the UI at /api/identity/swagger
+                c.RoutePrefix = "api/identity/swagger";
+            });
 
             app.UseHttpsRedirection();
             app.UseRouting();
