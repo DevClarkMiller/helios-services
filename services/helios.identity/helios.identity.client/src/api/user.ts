@@ -1,12 +1,10 @@
-import { buildHeaders, type FetcherData } from './ApiHelper';
-
-const BASE = import.meta.env.VITE_APP_API;
+import { buildHeaders, buildUrl, type FetcherData } from './ApiHelper';
 
 export const getUser = async (): Promise<unknown> => {
 	const payload: FetcherData = {};
 
 	try {
-		const url = new URL(`${BASE}/user`);
+		const url = buildUrl('/user');
 		const headers = buildHeaders();
 
 		const response = await fetch(url.toString(), { headers: headers });

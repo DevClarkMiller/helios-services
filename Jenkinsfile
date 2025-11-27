@@ -46,7 +46,7 @@ pipeline {
                         echo "Triggering ${service}..."
                         build job: service,
                                 parameters: [
-                                    booleanParam(name: 'FORCE_RUN', value: params.FORCE_RUN)
+                                    booleanParam(name: 'All', value: params.All)
                                 ],
                                 wait: true // set false for async
                         echo "${service} finished."

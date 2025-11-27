@@ -10,6 +10,11 @@ export const buildHeaders = (): Headers => {
 	return headers;
 };
 
+export const buildUrl = (url: string): URL => {
+	if (window.location.href.includes('localhost')) return new URL(`https://localhost:7022${url}`);
+	return new URL(url);
+};
+
 export interface FetcherData {
 	data?: unknown;
 	error?: string;

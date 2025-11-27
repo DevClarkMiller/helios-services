@@ -1,9 +1,7 @@
-import { buildHeaders, type FetcherData } from './ApiHelper';
-
-const BASE = import.meta.env.VITE_APP_API;
+import { buildHeaders, buildUrl, type FetcherData } from './ApiHelper';
 
 export const loginGoogle = async () => {
-	const url = new URL(`${BASE}/auth/login-google`);
+	const url = buildUrl('/auth/login-google');
 	url.searchParams.append('returnUrl', window.location.href);
 	window.location.href = url.toString();
 };
@@ -12,7 +10,7 @@ export const auth = async (): Promise<FetcherData> => {
 	const payload: FetcherData = {};
 
 	try {
-		const url = new URL(`${BASE}/auth`);
+		const url = buildUrl('/auth');
 		const headers = buildHeaders();
 
 		const response = await fetch(url.toString(), { headers: headers });

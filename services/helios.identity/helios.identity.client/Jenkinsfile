@@ -5,29 +5,24 @@ pipeline {
 
     parameters {
         booleanParam(
-            name: 'FORCE_RUN',
+            name: 'All',
             defaultValue: false,
             description: 'Forces run even if there are no changes'
         )
         booleanParam(
-            name: 'FORCE_RUN_DEV',
+            name: 'Dev',
             defaultValue: false,
-            description: 'Forces run prod even if there are no changes'
+            description: 'Run dev even if there are no changes'
         )
         booleanParam(
-            name: 'FORCE_RUN_PROD',
+            name: 'Prod',
             defaultValue: false,
-            description: 'Forces run prod even if there are no changes'
+            description: 'Run prod even if there are no changes'
         )
         booleanParam(
-            name: 'FORCE_RUN_UPDATE_NGINX_DEV',
+            name: 'UpdateNginx',
             defaultValue: false,
-            description: 'Forces run for update nginx dev step even if there are no changes'
-        )
-        booleanParam(
-            name: 'FORCE_RUN_UPDATE_NGINX_PROD',
-            defaultValue: false,
-            description: 'Forces run for update nginx prod step even if there are no changes'
+            description: 'Update nginx dev step even if there are no changes'
         )
     }
 
@@ -62,14 +57,14 @@ pipeline {
             }
         }
 
- 
+		// TODO: BUILD FOR PROD AND DEV SEPERATELY
         stage('Build') {
             when {
                 anyOf {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    expression { return params.FORCE_RUN }
+                    expression { return params.All }
                 }
             }
             steps {
@@ -85,8 +80,7 @@ pipeline {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    expression { return params.FORCE_RUN }
-                    expression { return params.FORCE_RUN_DEV }
+                    expression { return params.All || params.Dev }
                 }
             }
             steps {
@@ -102,7 +96,7 @@ pipeline {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    expression { return params.FORCE_RUN || params.FORCE_RUN_UPDATE_NGINX_DEV }
+                    expression { return params.All || params.UpdateNginx }
                 }
             }
 
@@ -119,8 +113,7 @@ pipeline {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    expression { return params.FORCE_RUN }
-                    expression { return params.FORCE_RUN_PROD }
+                    expression { return params.All || params.Prod }
                 }
             }
             steps {
@@ -136,7 +129,7 @@ pipeline {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    expression { return params.FORCE_RUN || params.FORCE_RUN_UPDATE_NGINX_PROD }
+                    expression { return params.All || params.UpdateNginx }
                 }
             }
             steps {
