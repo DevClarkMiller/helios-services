@@ -93,10 +93,8 @@ pipeline {
         stage('Update Nginx Dev') {
              when {
                 anyOf {
-                    changeset "${DIR}/src/**"
-                    changeset "${DIR}/package.json"
-                    changeset "${DIR}/package-lock.json"
-                    expression { return params.All || params.UpdateNginx }
+                    changeset "${DIR}/nginx.dev.conf"
+                    expression { return params.All || (params.Dev && params.UpdateNginx) }
                 }
             }
 
@@ -110,10 +108,8 @@ pipeline {
         stage('Deploy Prod') {
             when {
                 anyOf {
-                    changeset "${DIR}/src/**"
-                    changeset "${DIR}/package.json"
-                    changeset "${DIR}/package-lock.json"
-                    expression { return params.All || params.Prod }
+                    changeset "${DIR}/nginx.prod.conf"
+                    expression { return params.All || (params.Prod && params.UpdateNginx) }
                 }
             }
             steps {
