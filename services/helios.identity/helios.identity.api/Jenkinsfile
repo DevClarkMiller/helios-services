@@ -58,6 +58,7 @@ pipeline {
         stage('Build Docker Image') {
             when {
 				anyOf {
+					changeset "${DIR}/**"
 					expression { return params.All || params.Dev || params.Prod }	
 				}
 			}
@@ -73,6 +74,12 @@ pipeline {
         // stage('Transfer docker image'){}
 
         stage('Deploy Dev') {
+			when {
+				anyof {
+					changeset "${DIR}/**"
+					expression { return params.All || params.Dev }
+				}
+			}
             steps {
 				dir("${DIR}") { 
 					sh 'scp docker-compose.yml miller@sys1.clarkmiller.ca:/home/miller/helios-identity'
