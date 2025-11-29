@@ -30,6 +30,8 @@ pipeline {
         DIR = 'services/helios.identity/helios.identity.client'
         USERNAME = credentials('vps-username')
         DOMAIN = credentials('vps-domain')
+        PACKAGE = "${DIR}/package.json"
+        PACKAGE_LOCK = "${DIR}/package-lock.json"
     }
 
     stages {
@@ -43,8 +45,8 @@ pipeline {
             when {
                 anyOf {
                     changeset "${DIR}/src/**"
-                    changeset "${DIR}/package.json"
-                    changeset "${DIR}/package-lock.json"
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
                     expression { return params.FORCE_RUN }
                 }
             }
@@ -61,8 +63,8 @@ pipeline {
             when {
                 anyOf {
                     changeset "${DIR}/src/**"
-                    changeset "${DIR}/package.json"
-                    changeset "${DIR}/package-lock.json"
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
                     expression { return params.All || params.Dev }
                 }
             }
@@ -77,8 +79,8 @@ pipeline {
             when {
                 anyOf {
                     changeset "${DIR}/src/**"
-                    changeset "${DIR}/package.json"
-                    changeset "${DIR}/package-lock.json"
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
                     expression { return params.All || params.Dev }
                 }
             }
@@ -108,8 +110,8 @@ pipeline {
             when {
                 anyOf {
                     changeset "${DIR}/src/**"
-                    changeset "${DIR}/package.json"
-                    changeset "${DIR}/package-lock.json"
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
                     expression { return params.All || params.Prod }
                 }
             }
@@ -124,8 +126,8 @@ pipeline {
             when {
                 anyOf {
                     changeset "${DIR}/src/**"
-                    changeset "${DIR}/package.json"
-                    changeset "${DIR}/package-lock.json"
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
                     expression { return params.All || params.Prod }
                 }
             }
