@@ -15,6 +15,7 @@ export const auth = async (): Promise<FetcherData> => {
 	const payload: FetcherData = {};
 
 	try {
+		console.log(`${IDENTITY_URL}${BASE_URL}/auth`);
 		const url = buildIdentityUrl('/auth');
 		const headers = buildHeaders();
 
