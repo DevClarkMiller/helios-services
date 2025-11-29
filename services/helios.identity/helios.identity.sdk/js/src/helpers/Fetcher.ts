@@ -1,4 +1,4 @@
-import { buildHeaders, FetcherData } from "./ApiHelper";
+import { type FetcherData, buildHeaders } from "./ApiHelper.js";
 
 const fetcher = async (url: string | URL): Promise<FetcherData> => {
   const payload: FetcherData = {};

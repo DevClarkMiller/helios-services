@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { login } from "../services/Identity/Auth";
+import { login } from "../Identity/Auth.js";
 
 export interface UseAuthOptions {
   optional: boolean;
@@ -36,8 +36,9 @@ const useAuth = (
   const tryLogin = useCallback(async () => {
     const data = await login(identityUrl, {
       optional: options.optional,
-      identityApiUrl: options.identityApiUrl,
+      identityApiUrl: options.identityApiUrl!,
     });
+
     if (data) setIsLoggedIn(true);
   }, [options]);
 

@@ -1,5 +1,5 @@
-import { type FetcherData } from "../../helpers/ApiHelper";
-import fetcher from "../../helpers/Fetcher";
+import { type FetcherData } from "../helpers/ApiHelper.js";
+import fetcher from "../helpers/Fetcher.js";
 
 const BASE_URL = "/api/identity";
 
