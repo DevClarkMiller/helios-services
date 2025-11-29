@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { Route, Routes, useSearchParams, useNavigate } from 'react-router-dom';
-import { auth } from './api/login';
+import { auth } from './services/Identity/Auth';
 
 // Components
 import { Container } from 'react-bootstrap';
@@ -21,8 +21,10 @@ function App() {
 
 		if (!redirectUrl) return;
 
+		const token = localStorage.getItem('token') as string;
+
 		const url = new URL(redirectUrl);
-		url.searchParams.append('token', resp.data as string);
+		url.searchParams.append('token', token);
 		window.location.href = url.toString();
 	}, [redirectUrl]);
 
@@ -38,8 +40,8 @@ function App() {
 	}, [redirectIfAuth, token, navigate]);
 
 	// First thing we do on mount is check if the users login token is valid
+	// First try auth
 	useEffect(() => {
-		// First try auth
 		login();
 	}, [login]);
 

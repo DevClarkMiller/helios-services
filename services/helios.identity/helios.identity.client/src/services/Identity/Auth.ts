@@ -1,7 +1,12 @@
-import { buildHeaders, buildUrl, type FetcherData } from './ApiHelper';
+import { buildHeaders, type FetcherData } from '../../helpers/ApiHelper';
+
+const IDENTITY_URL = import.meta.env.VITE_IDENTITY_URL;
+const BASE_URL = '/api/identity';
+
+export const buildIdentityUrl = (route: string) => new URL(`${IDENTITY_URL}${BASE_URL}${route}`);
 
 export const loginGoogle = async () => {
-	const url = buildUrl('/api/identity/auth/login-google');
+	const url = buildIdentityUrl('/auth/login-google');
 	url.searchParams.append('returnUrl', window.location.href);
 	window.location.href = url.toString();
 };
@@ -10,7 +15,7 @@ export const auth = async (): Promise<FetcherData> => {
 	const payload: FetcherData = {};
 
 	try {
-		const url = buildUrl('/api/identity/auth');
+		const url = buildIdentityUrl('/auth');
 		const headers = buildHeaders();
 
 		const response = await fetch(url.toString(), { headers: headers });
