@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { login } from "../Identity/Auth.js";
+import { login } from "../services/index.js";
 
 export interface UseAuthOptions {
   optional: boolean;
