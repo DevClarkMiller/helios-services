@@ -57,19 +57,18 @@ pipeline {
             }
         }
 
-		// TODO: BUILD FOR PROD AND DEV SEPERATELY
-        stage('Build') {
+        stage('Build Dev') {
             when {
                 anyOf {
                     changeset "${DIR}/src/**"
                     changeset "${DIR}/package.json"
                     changeset "${DIR}/package-lock.json"
-                    expression { return params.All }
+                    expression { return params.All || params.Dev }
                 }
             }
             steps {
                 dir("${DIR}") {
-                    sh 'npm run build'
+                    sh 'npm run build:dev'
                 }
             }
         }
@@ -101,6 +100,22 @@ pipeline {
             steps {
                 dir("${DIR}") {
                     updateNginxConf(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca', 'nginx.dev.conf')
+                }
+            }
+        }
+
+        stage('Build Prod') {
+            when {
+                anyOf {
+                    changeset "${DIR}/src/**"
+                    changeset "${DIR}/package.json"
+                    changeset "${DIR}/package-lock.json"
+                    expression { return params.All || params.Prod }
+                }
+            }
+            steps {
+                dir("${DIR}") {
+                    sh 'npm run build'
                 }
             }
         }
