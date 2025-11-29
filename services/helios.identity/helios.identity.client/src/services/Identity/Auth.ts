@@ -7,7 +7,9 @@ export const buildIdentityUrl = (route: string) => new URL(`${IDENTITY_URL}${BAS
 
 export const loginGoogle = async () => {
 	const url = buildIdentityUrl('/auth/login-google');
-	url.searchParams.append('returnUrl', window.location.href);
+	const returnUrl = new URL(window.location.href);
+
+	url.searchParams.append('returnUrl', returnUrl.toString());
 	window.location.href = url.toString();
 };
 
@@ -15,7 +17,6 @@ export const auth = async (): Promise<FetcherData> => {
 	const payload: FetcherData = {};
 
 	try {
-		console.log(`${IDENTITY_URL}${BASE_URL}/auth`);
 		const url = buildIdentityUrl('/auth');
 		const headers = buildHeaders();
 
