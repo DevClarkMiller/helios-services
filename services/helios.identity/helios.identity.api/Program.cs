@@ -44,7 +44,7 @@ namespace helios.identity.api {
             var appSettings = builder.Configuration.GetSection("AppSettings").GetValue<string>("Secret");
             var key = Encoding.ASCII.GetBytes(appSettings!);
 
-            System.Console.WriteLine(appSettings);
+            // System.Console.WriteLine(appSettings);
 
             var google = builder.Configuration.GetSection("Authentication:Google");
 
