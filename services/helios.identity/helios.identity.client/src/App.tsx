@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { Route, Routes, useSearchParams } from 'react-router-dom';
+import { Route, Routes, useSearchParams, useNavigate } from 'react-router-dom';
 import { auth } from './services/Identity/Auth';
 
 // Components
@@ -8,7 +8,7 @@ import Login from './components/Login/Login';
 import Header from './components/Header/Header';
 
 function App() {
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 	const token = searchParams.get('token');
 	const redirectUrl = searchParams.get('redirectUrl');
@@ -35,9 +35,9 @@ function App() {
 			localStorage.setItem('token', token as string);
 			await redirectIfAuth();
 		} else {
-			// navigate('/login');
+			navigate({ pathname: '/login', search: searchParams.toString() });
 		}
-	}, [redirectIfAuth, token]);
+	}, [redirectIfAuth, token, navigate, searchParams]);
 
 	// First thing we do on mount is check if the users login token is valid
 	// First try auth
