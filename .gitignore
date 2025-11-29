@@ -68,3 +68,4 @@ nunit-*.xml
 .env.staging
 .env.production
 services/helios.identity/helios.identity.sdk/js/build/**
+utilities/sdk/js/build/**
