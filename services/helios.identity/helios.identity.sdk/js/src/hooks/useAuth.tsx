@@ -15,6 +15,7 @@ const useAuth = (
     identityApiUrl: null,
   }
 ) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const token = searchParams.get("token");
 
@@ -34,11 +35,13 @@ const useAuth = (
   }, [searchParams, setSearchParams, token]);
 
   const tryLogin = useCallback(async () => {
+    setIsLoading(true);
     const data = await login(identityUrl, {
       optional: options.optional,
       identityApiUrl: options.identityApiUrl!,
     });
 
+    setIsLoading(false);
     if (data) setIsLoggedIn(true);
   }, [options]);
 
@@ -54,7 +57,7 @@ const useAuth = (
     tryLogin,
   ]);
 
-  return { isLoggedIn, setIsLoggedIn };
+  return { isLoading, isLoggedIn, setIsLoggedIn };
 };
 
 export default useAuth;
