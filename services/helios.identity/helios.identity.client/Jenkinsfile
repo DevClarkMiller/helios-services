@@ -47,7 +47,7 @@ pipeline {
                     changeset "${DIR}/src/**"
                     changeset PACKAGE
                     changeset PACKAGE_LOCK
-                    expression { return params.FORCE_RUN }
+                    expression { return params.All || params.Dev || params.Prod }
                 }
             }
             steps {
