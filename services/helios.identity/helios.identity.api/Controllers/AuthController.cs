@@ -19,7 +19,7 @@ namespace helios.identity.api.Controllers {
             var claims = authResult.Principal!.Identities.FirstOrDefault()?.Claims;
             var userId = claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            return Ok(userId);
+            return Ok(new { userId });
         }
 
         [HttpGet("login-google")]
