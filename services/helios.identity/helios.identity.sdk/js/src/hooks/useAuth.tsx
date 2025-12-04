@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { login } from "../services/index.js";
 
 export interface UseAuthOptions {
@@ -10,52 +10,44 @@ const useAuth = (
   identityUrl: string,
   searchParams: any,
   setSearchParams: any,
-  options: UseAuthOptions = {
-    optional: false,
-    identityApiUrl: null,
-  }
+  options: UseAuthOptions = { optional: false, identityApiUrl: null }
 ) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const token = searchParams.get("token");
+
+  const tokenParam = useMemo(() => searchParams.get("token"), [searchParams]);
+  const { optional, identityApiUrl } = options;
 
   const getToken = useCallback((): string | null => {
-    if (!token) {
-      // Check local storage
-      const tokenFromStorage = localStorage.getItem("token");
-      return tokenFromStorage;
+    if (tokenParam) {
+      localStorage.setItem("token", tokenParam);
+
+      // Only delete token if it exists in URL
+      const newParams = new URLSearchParams(searchParams);
+      if (newParams.has("token")) {
+        newParams.delete("token");
+        setSearchParams(newParams);
+      }
+
+      return tokenParam;
     }
 
-    // Set the token from params into local storage and then delete the token from parms
-    localStorage.setItem("token", token as string);
-    const newParams = new URLSearchParams(searchParams);
-    newParams.delete("token");
-    setSearchParams(newParams);
-    return token;
-  }, [searchParams, setSearchParams, token]);
+    return localStorage.getItem("token");
+  }, [tokenParam, searchParams, setSearchParams]);
 
   const tryLogin = useCallback(async () => {
     setIsLoading(true);
-    const data = await login(identityUrl, {
-      optional: options.optional,
-      identityApiUrl: options.identityApiUrl!,
-    });
 
-    setIsLoading(false);
+    const data = await login(identityUrl, { optional, identityApiUrl: identityApiUrl ?? identityUrl });
+
     if (data) setIsLoggedIn(true);
-  }, [options]);
+    setIsLoading(false);
+  }, [identityUrl, optional, identityApiUrl]);
 
   useEffect(() => {
     getToken();
     tryLogin();
-  }, [
-    searchParams,
-    setSearchParams,
-    token,
-    getToken,
-    options.optional,
-    tryLogin,
-  ]);
+  }, [getToken, tryLogin]);
 
   return { isLoading, isLoggedIn, setIsLoggedIn };
 };
