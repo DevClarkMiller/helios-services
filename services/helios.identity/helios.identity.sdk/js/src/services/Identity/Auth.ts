@@ -1,5 +1,4 @@
-import { type FetcherData } from "../../helpers/ApiHelper.js";
-import fetcher from "../../helpers/Fetcher.js";
+import { fetcher, type FetcherData } from "helios-utilities-sdk";
 
 const BASE_URL = "/api/identity";
 

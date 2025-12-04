@@ -1,6 +1,6 @@
 {
   "name": "helios-identity-sdk",
-  "version": "1.0.11",
+  "version": "1.0.18",
   "description": "",
   "license": "ISC",
   "author": "DevClarkMiller",
@@ -16,7 +16,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "react": "^19.2.0"
+    "helios-utilities-sdk": "^1.0.3",
+    "react": "^19.2.0",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@types/react": "^19.2.7"
