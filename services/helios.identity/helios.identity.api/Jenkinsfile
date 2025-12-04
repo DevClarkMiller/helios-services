@@ -44,9 +44,11 @@ pipeline {
         }
 
         stage('Load secrets') {
-            when { 
-				changeset "${DIR}/**"
-				expression { return params.All || params.Dev || params.Prod }	
+            when {
+				anyOf {
+					changeset "${DIR}/**"
+					expression { return params.All || params.Dev || params.Prod }	
+				}
 			}
 			steps {
                 dir("${DIR}") {
