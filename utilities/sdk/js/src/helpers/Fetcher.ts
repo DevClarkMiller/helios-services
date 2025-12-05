@@ -1,4 +1,8 @@
-import { type FetcherData, buildHeaders } from "./ApiHelpers.js";
+import {
+  type FetcherData,
+  buildHeaders,
+  normalizeFetcherData,
+} from "./ApiHelpers.js";
 
 const fetcher = async (url: string | URL): Promise<FetcherData> => {
   const payload: FetcherData = {};
@@ -8,7 +12,7 @@ const fetcher = async (url: string | URL): Promise<FetcherData> => {
 
     const response = await fetch(url.toString(), { headers: headers });
     if (response.status == 401) throw new Error("Unauthorized");
-    payload.data = await response.text();
+    payload.data = await response.json();
   } catch (err: unknown) {
     const errorMessage: string =
       err instanceof Error ? err.message : "Unknown error occured";
@@ -16,7 +20,7 @@ const fetcher = async (url: string | URL): Promise<FetcherData> => {
     payload.error = errorMessage;
   }
 
-  return payload;
+  return normalizeFetcherData(payload);
 };
 
 export default fetcher;
