@@ -25,7 +25,5 @@ export interface User {
 export const getUser = async (identityUrl: string): Promise<User> => {
   const url = buildUrl(identityUrl, "/user");
   const payload = await fetcher(url);
-  const fetcherData = payload.data;
-  const user = (fetcherData as any).data as User;
-  return user;
+  return payload.data as User;
 };
