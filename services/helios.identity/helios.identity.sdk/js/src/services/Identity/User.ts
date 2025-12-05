@@ -1,4 +1,4 @@
-import { fetcher, type FetcherData } from "helios-utilities-sdk";
+import { fetcher } from "helios-utilities-sdk";
 const BASE_URL = "/api/identity";
 
 const buildUrl = (identityUrl: string, route: string): URL =>
