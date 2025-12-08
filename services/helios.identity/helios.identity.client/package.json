@@ -15,7 +15,7 @@
 		"bootstrap": "^5.3.8",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-prettier": "^5.5.4",
-		"helios-identity-sdk": "^1.0.24",
+		"helios-identity-sdk": "^1.0.25",
 		"helios-utilities-sdk": "^1.0.13",
 		"react": "^19.1.1",
 		"react-bootstrap": "^2.10.10",

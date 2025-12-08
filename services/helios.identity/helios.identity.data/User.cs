@@ -15,6 +15,6 @@ namespace helios.identity.data {
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? LastLoginAt { get; set; }
         public bool IsEmailVerified { get; set; } = false;
-        public ICollection<UserLogin> Logins = new List<UserLogin>();
+        public ICollection<UserLogin> Logins { get; set; } = new List<UserLogin>();
     }
 }

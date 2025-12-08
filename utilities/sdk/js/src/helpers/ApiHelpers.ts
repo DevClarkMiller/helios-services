@@ -19,6 +19,7 @@ export const buildUrl = (url: string): URL => {
 
 export const normalizeFetcherData = (fetcherData: FetcherData) => {
   const data = fetcherData.data as any;
+  if (!data) return fetcherData;
 
   NESTED_KEYS.forEach((key) => {
     if (key in data) (fetcherData as any)[key] = data[key];

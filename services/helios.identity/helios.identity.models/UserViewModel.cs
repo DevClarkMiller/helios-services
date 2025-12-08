@@ -8,6 +8,6 @@
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? LastLoginAt { get; set; } = null;
         public bool IsEmailVerified { get; set; } = false;
-        public ICollection<UserLoginViewModel> Logins = new List<UserLoginViewModel>();
+        public ICollection<UserLoginViewModel> Logins { get; set; } = new List<UserLoginViewModel>();
     }
 }
