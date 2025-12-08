@@ -12,7 +12,8 @@ const fetcher = async (url: string | URL): Promise<FetcherData> => {
 
     const response = await fetch(url.toString(), { headers: headers });
     if (response.status == 401) throw new Error("Unauthorized");
-    payload.data = await response.json();
+    const data = await response.json();
+    payload.data = data;
   } catch (err: unknown) {
     const errorMessage: string =
       err instanceof Error ? err.message : "Unknown error occured";

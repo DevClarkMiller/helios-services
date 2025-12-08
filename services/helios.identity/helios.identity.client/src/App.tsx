@@ -1,11 +1,13 @@
 import { useCallback, useEffect } from 'react';
 import { Route, Routes, useSearchParams, useNavigate } from 'react-router-dom';
-import { auth } from './services/Identity/Auth';
 
 // Components
 import { Container } from 'react-bootstrap';
 import Login from './components/Login/Login';
 import Header from './components/Header/Header';
+import { auth } from 'helios-identity-sdk';
+
+const IDENTITY_URL = import.meta.env.VITE_IDENTITY_URL;
 
 function App() {
 	const navigate = useNavigate();
@@ -14,7 +16,7 @@ function App() {
 	const redirectUrl = searchParams.get('redirectUrl');
 
 	const redirectIfAuth = useCallback(async () => {
-		let resp = await auth();
+		let resp = await auth(IDENTITY_URL);
 		const authSuccess = resp.data != null;
 
 		if (!authSuccess) return;
