@@ -1,10 +1,10 @@
 import React, { useState, type FormEvent } from 'react';
 import { Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { loginGoogle } from '../../services/Identity';
 
 // Icons
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
-import { loginGoogle } from '../../services/Identity/Auth';
 
 interface FormData {
 	email: string;
