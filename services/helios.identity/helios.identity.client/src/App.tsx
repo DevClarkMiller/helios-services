@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Route, Routes, useSearchParams, useNavigate } from 'react-router-dom';
 
 // Components
@@ -6,11 +6,14 @@ import { Container } from 'react-bootstrap';
 import Login from './components/Login/Login';
 import Header from './components/Header/Header';
 import { auth } from 'helios-identity-sdk';
+import { Bars } from 'react-loading-icons';
 
 const IDENTITY_URL = import.meta.env.VITE_IDENTITY_URL;
 
 function App() {
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(false);
+
 	const [searchParams] = useSearchParams();
 	const token = searchParams.get('token');
 	const redirectUrl = searchParams.get('redirectUrl');
@@ -31,6 +34,7 @@ function App() {
 	}, [redirectUrl]);
 
 	const login = useCallback(async () => {
+		setLoading(true);
 		await redirectIfAuth();
 
 		if (token != null) {
@@ -39,6 +43,9 @@ function App() {
 		} else {
 			navigate({ pathname: '/login', search: searchParams.toString() });
 		}
+
+		console.log('SETTING LOADING FALSE!');
+		setLoading(false);
 	}, [redirectIfAuth, token, navigate, searchParams]);
 
 	// First thing we do on mount is check if the users login token is valid
@@ -51,10 +58,14 @@ function App() {
 		<Container fluid className="app-container bg-dark justify-content-between p-0">
 			<Header />
 
-			<div className="container p-2 m-0 d-flex flex-grow-1 justify-content-center items-align-center">
-				<Routes>
-					<Route path="/login" element={<Login />} />
-				</Routes>
+			<div className="container p-2 m-0 d-flex flex-grow-1 justify-content-center align-items-center">
+				{!loading ? (
+					<Routes>
+						<Route path="/login" element={<Login />} />
+					</Routes>
+				) : (
+					<Bars />
+				)}
 			</div>
 		</Container>
 	);

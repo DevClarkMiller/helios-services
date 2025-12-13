@@ -108,9 +108,11 @@ const Login = () => {
 						</form>
 					</div>
 
-					<Link className="p-3 pt-1 text-decoration-none text-light" to="/createAccount">
-						Don't have an account? Sign up
-					</Link>
+					{enabledLoginMethods.helios && (
+						<Link className="p-3 pt-1 text-decoration-none text-light" to="/createAccount">
+							Don't have an account? Sign up
+						</Link>
+					)}
 				</div>
 			</div>
 		</div>
