@@ -39,6 +39,8 @@ namespace helios.identity.api.Commands.Handlers {
                     user.FirstName = firstName;
                     user.LastName = lastName;
 
+                    user.LastLoginAt = DateTime.UtcNow;
+
                     // Do an update for the user based off the claims
                     await _context.SaveChangesAsync(cancellationToken);
 

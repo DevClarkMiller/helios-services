@@ -3,11 +3,10 @@ import { AccountContext } from '../../../context/AccountContextProvider';
 
 const AccountInfo = () => {
 	const { user } = useContext(AccountContext);
+
 	return (
-		<div className="card p-2">
-			<div className="card-body">
-				<h6>User ID: {user?.id}</h6>
-			</div>
+		<div className="w-100 h-100 p-1">
+			<h4>Last logged in: {user?.lastLoginAt}</h4>
 		</div>
 	);
 };
