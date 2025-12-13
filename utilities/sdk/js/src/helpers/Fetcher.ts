@@ -1,24 +1,23 @@
+import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 import {
   type FetcherData,
   buildHeaders,
+  handleErr,
   normalizeFetcherData,
 } from "./ApiHelpers.js";
 
 const fetcher = async (url: string | URL): Promise<FetcherData> => {
-  const payload: FetcherData = {};
+  let payload: FetcherData = {};
 
   try {
     const headers = buildHeaders();
 
     const response = await fetch(url.toString(), { headers: headers });
-    if (response.status == 401) throw new Error("Unauthorized");
+    if (response.status == 401) throw new UnauthorizedError("Unauthorized");
     const data = await response.json();
     payload.data = data;
   } catch (err: unknown) {
-    const errorMessage: string =
-      err instanceof Error ? err.message : "Unknown error occured";
-    console.log("Error getting auth: " + errorMessage);
-    payload.error = errorMessage;
+    payload = handleErr(err, payload);
   }
 
   return normalizeFetcherData(payload);

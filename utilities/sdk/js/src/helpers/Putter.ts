@@ -1,19 +1,19 @@
 import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 import {
-  type FetcherData,
   buildHeaders,
   handleErr,
   normalizeFetcherData,
+  type FetcherData,
 } from "./ApiHelpers.js";
 
-const poster = async (url: string | URL, body: any): Promise<FetcherData> => {
+const putter = async (url: string | URL, body: any): Promise<FetcherData> => {
   let payload: FetcherData = {};
 
   try {
     const headers = buildHeaders();
 
     const response = await fetch(url.toString(), {
-      method: "POST",
+      method: "PUT",
       headers: headers,
       body: body,
     });
@@ -26,4 +26,4 @@ const poster = async (url: string | URL, body: any): Promise<FetcherData> => {
   return normalizeFetcherData(payload);
 };
 
-export default poster;
+export default putter;

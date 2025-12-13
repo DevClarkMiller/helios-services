@@ -1,3 +1,5 @@
+import { UnauthorizedError } from "../errors/UnauthorizedError.js";
+
 const NESTED_KEYS = ["data", "error", "succeeded"];
 
 export const buildHeaders = (): Headers => {
@@ -28,8 +30,23 @@ export const normalizeFetcherData = (fetcherData: FetcherData) => {
   return fetcherData;
 };
 
+export const handleErr = (err: unknown, payload: FetcherData): FetcherData => {
+  let errorMessage = "";
+
+  if (err instanceof UnauthorizedError) {
+    errorMessage = err.message;
+    payload.unauthorized = true;
+  } else if (err instanceof Error) errorMessage = err.message;
+  else errorMessage = "Unknown error occured";
+
+  console.log("Error: " + errorMessage);
+  payload.error = errorMessage;
+  return payload;
+};
+
 export interface FetcherData {
   data?: unknown;
   error?: string;
   succeeded?: boolean;
+  unauthorized?: boolean;
 }
