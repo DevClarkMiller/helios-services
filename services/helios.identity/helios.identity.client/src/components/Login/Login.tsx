@@ -1,4 +1,4 @@
-import React, { useState, type FormEvent } from 'react';
+import React, { useMemo, useState, type FormEvent } from 'react';
 import { Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { loginGoogle } from '../../services/Identity';
@@ -11,8 +11,24 @@ interface FormData {
 	password: string;
 }
 
+const IMPLEMENTED_METHODS = ['google'];
+
 const Login = () => {
 	const [formData, setFormData] = useState<FormData>({ email: '', password: '' });
+
+	const enabledLoginMethods = useMemo(() => {
+		const methods = {
+			google: true,
+			microsoft: true,
+			helios: true,
+		};
+
+		Object.keys(methods).forEach(method => {
+			if (!IMPLEMENTED_METHODS.includes(method)) (methods as Record<string, boolean>)[method] = false;
+		});
+
+		return methods;
+	}, []);
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -41,12 +57,17 @@ const Login = () => {
 				<div className="card p-2 w-75 bg-secondary shadow" style={{ maxWidth: '352px' }}>
 					<div className="card-body">
 						<div className="d-flex justify-content-center gap-1 mb-3">
-							<div onClick={loginGoogle} className="btn btn-info w-100 btn-icon p-2">
+							<button
+								disabled={!enabledLoginMethods.google}
+								onClick={loginGoogle}
+								className="btn btn-info w-100 btn-icon p-2">
 								<FaGoogle className="text-white" />
-							</div>
-							<div className="btn btn-info w-100 btn-icon p-2">
+							</button>
+							<button
+								disabled={!enabledLoginMethods.microsoft}
+								className="btn btn-info w-100 btn-icon p-2">
 								<FaMicrosoft className="text-white" />
-							</div>
+							</button>
 						</div>
 
 						<form onSubmit={onSubmit}>
@@ -60,6 +81,7 @@ const Login = () => {
 										value={formData?.email}
 										name="email"
 										required
+										disabled={!enabledLoginMethods.helios}
 										onChange={onChange}></Form.Control>
 								</Form.Group>
 
@@ -72,11 +94,15 @@ const Login = () => {
 										value={formData?.password}
 										name="password"
 										required
+										disabled={!enabledLoginMethods.helios}
 										onChange={onChange}></Form.Control>
 								</Form.Group>
 							</div>
 
-							<button className="btn btn-primary w-100 mt-3 text-light fw-bold" type="submit">
+							<button
+								disabled={!enabledLoginMethods.helios}
+								className="btn btn-primary w-100 mt-3 text-light fw-bold"
+								type="submit">
 								Login
 							</button>
 						</form>

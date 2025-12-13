@@ -32,6 +32,8 @@ pipeline {
         DOMAIN = credentials('vps-domain')
         PACKAGE = "${DIR}/package.json"
         PACKAGE_LOCK = "${DIR}/package-lock.json"
+        SOLUTION = 'helios.identity'
+        PROJECT = 'client'
     }
 
     stages {
@@ -53,8 +55,8 @@ pipeline {
             steps {
                 dir("${DIR}") { 
                     sh 'npm install'
-					loadEnvFile('helios.identity', 'client', 'development')
-					loadEnvFile('helios.identity', 'client', 'production')
+					loadEnvFile(SOLUTION, PROJECT, 'development')
+					loadEnvFile(SOLUTION, PROJECT, 'production')
                 }
             }
         }
