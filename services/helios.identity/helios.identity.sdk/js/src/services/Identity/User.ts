@@ -1,4 +1,4 @@
-import { fetcher } from "helios-utilities-sdk";
+import { fetcher, type FetcherData } from "helios-utilities-sdk";
 const BASE_URL = "/api/identity";
 
 const buildUrl = (identityUrl: string, route: string): URL =>
@@ -22,8 +22,9 @@ export interface User {
   logins: UserLogin[];
 }
 
-export const getUser = async (identityUrl: string): Promise<User> => {
+export const getUser = async (
+  identityUrl: string
+): Promise<FetcherData<User | undefined>> => {
   const url = buildUrl(identityUrl, "/user");
-  const payload = await fetcher(url);
-  return payload.data as User;
+  return await fetcher(url);
 };

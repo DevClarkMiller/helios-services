@@ -1,12 +1,14 @@
 import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { auth, getUser, type User } from 'helios-identity-sdk';
-import { identityClient } from '../helpers/ApiHelper';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import type { FetcherData } from 'helios-utilities-sdk';
+import { identityClient } from '../helpers/ApiHelper';
 
 export interface AccountContextType {
 	isSignedIn: boolean;
 	user: User | undefined;
 	isAuthLoading: boolean;
+	identityClientSecure: typeof identityClient;
 }
 
 export const AccountContext = createContext<AccountContextType>({} as any);
@@ -18,18 +20,18 @@ const AccountContextProvider = ({ children }: { children: React.ReactNode }) => 
 	const [isSignedIn, setIsSignedIn] = useState(false);
 
 	const [searchParams] = useSearchParams();
-	const paramToken = searchParams.get('token');
-	const redirectUrl = searchParams.get('redirectUrl');
+	const paramToken = useMemo(() => searchParams.get('token'), [searchParams]);
+	const redirectUrl = useMemo(() => searchParams.get('redirectUrl'), [searchParams]);
 
-	const isAuthenticated = async () => {
+	const isAuthenticated = useCallback(async () => {
 		let resp = await identityClient(auth);
 		return resp.data != null;
-	};
+	}, []);
 
 	const onAuth = useCallback(async () => {
 		setIsSignedIn(true);
-		const fetchedUser = await identityClient(getUser);
-		setUser(fetchedUser);
+		const resp = await identityClient(getUser);
+		if (resp.data) setUser(resp.data);
 	}, []);
 
 	const setTokenFromParams = useCallback(() => {
@@ -41,44 +43,63 @@ const AccountContextProvider = ({ children }: { children: React.ReactNode }) => 
 		window.history.replaceState({}, '', url.toString());
 	}, [paramToken]);
 
-	const redirectToHost = useCallback(
-		(isAuth: boolean) => {
-			if (!isAuth) return;
-			if (!redirectUrl) return true;
+	const redirectToHost = useCallback(() => {
+		if (!redirectUrl) return true;
 
-			const token = localStorage.getItem('token') as string;
+		const token = localStorage.getItem('token') as string;
 
-			const url = new URL(redirectUrl);
-			url.searchParams.append('token', token);
-			window.location.href = url.toString();
-			return true;
-		},
-		[redirectUrl]
-	);
+		const url = new URL(redirectUrl);
+		url.searchParams.append('token', token);
+		window.location.href = url.toString();
+		return true;
+	}, [redirectUrl]);
 
 	const login = useCallback(async () => {
 		setIsAuthLoading(true);
-		const isAuth = await isAuthenticated();
 
-		if (isAuth) await onAuth();
-		else if (paramToken != null) {
+		let isAuth = await isAuthenticated();
+
+		if (isAuth) {
+			await onAuth();
+		} else if (paramToken) {
 			setTokenFromParams();
-			const isAuth = await isAuthenticated();
-			redirectToHost(isAuth);
-		} else navigate({ pathname: '/login', search: searchParams.toString() });
+			isAuth = await isAuthenticated();
+			if (isAuth) {
+				await onAuth();
+				redirectToHost();
+			} else {
+				navigate({ pathname: '/login', search: searchParams.toString() });
+			}
+		} else {
+			navigate({ pathname: '/login', search: searchParams.toString() });
+		}
 
 		setIsAuthLoading(false);
-	}, [redirectToHost, onAuth, paramToken, navigate, searchParams, setTokenFromParams]);
+	}, [isAuthenticated, onAuth, paramToken, navigate, searchParams, setTokenFromParams, redirectToHost]);
 
 	// First thing we do on mount is check if the users login token is valid
 	// First try auth
 	useEffect(() => {
 		login();
-	}, [login]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const identityClientSecure = useCallback(
+		async <T extends FetcherData<any>>(method: (_baseUrl: string) => T | Promise<T>): Promise<T> => {
+			const payload = await identityClient(method);
+
+			if (payload.unauthorized) {
+				login();
+			}
+
+			return payload;
+		},
+		[login]
+	);
 
 	const value = useMemo(() => {
-		return { isSignedIn, user, isAuthLoading };
-	}, [isSignedIn, user, isAuthLoading]);
+		return { isSignedIn, user, isAuthLoading, identityClientSecure };
+	}, [isSignedIn, user, isAuthLoading, identityClientSecure]);
 
 	return <AccountContext.Provider value={value}>{children}</AccountContext.Provider>;
 };

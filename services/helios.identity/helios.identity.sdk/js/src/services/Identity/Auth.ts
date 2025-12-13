@@ -5,10 +5,11 @@ const BASE_URL = "/api/identity";
 const buildUrl = (identityUrl: string, route: string): URL =>
   new URL(`${identityUrl}${BASE_URL}${route}`);
 
-export const auth = async (identityUrl: string): Promise<FetcherData> => {
+export const auth = async (
+  identityUrl: string
+): Promise<FetcherData<unknown>> => {
   const url = buildUrl(identityUrl, "/auth");
-  const payload = await fetcher(url);
-  return payload;
+  return await fetcher(url);
 };
 
 export interface LoginOptions {

@@ -6,8 +6,11 @@ import {
   normalizeFetcherData,
 } from "./ApiHelpers.js";
 
-const poster = async (url: string | URL, body: any): Promise<FetcherData> => {
-  let payload: FetcherData = {};
+const poster = async <T>(
+  url: string | URL,
+  body: any
+): Promise<FetcherData<T>> => {
+  let payload: FetcherData<T> = {};
 
   try {
     const headers = buildHeaders();

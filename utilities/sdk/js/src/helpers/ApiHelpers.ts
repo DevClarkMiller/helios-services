@@ -19,7 +19,7 @@ export const buildUrl = (url: string): URL => {
   return new URL(`${window.location.origin}${url}`);
 };
 
-export const normalizeFetcherData = (fetcherData: FetcherData) => {
+export const normalizeFetcherData = <T>(fetcherData: FetcherData<T>) => {
   const data = fetcherData.data as any;
   if (!data) return fetcherData;
 
@@ -30,7 +30,10 @@ export const normalizeFetcherData = (fetcherData: FetcherData) => {
   return fetcherData;
 };
 
-export const handleErr = (err: unknown, payload: FetcherData): FetcherData => {
+export const handleErr = <T>(
+  err: unknown,
+  payload: FetcherData<T>
+): FetcherData<T> => {
   let errorMessage = "";
 
   if (err instanceof UnauthorizedError) {
@@ -44,8 +47,8 @@ export const handleErr = (err: unknown, payload: FetcherData): FetcherData => {
   return payload;
 };
 
-export interface FetcherData {
-  data?: unknown;
+export interface FetcherData<T> {
+  data?: T;
   error?: string;
   succeeded?: boolean;
   unauthorized?: boolean;
