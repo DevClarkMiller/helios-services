@@ -46,8 +46,6 @@ namespace helios.identity.api {
             var appSettings = builder.Configuration.GetSection("AppSettings").GetValue<string>("Secret");
             var key = Encoding.ASCII.GetBytes(appSettings!);
 
-            // System.Console.WriteLine(appSettings);
-
             var google = builder.Configuration.GetSection("Authentication:Google");
 
             builder.Services.AddAuthentication(options => {
@@ -74,7 +72,7 @@ namespace helios.identity.api {
                     options.CallbackPath = "/api/identity/signin-google";
                 });
 
-            builder.Services.AddSingleton<IEmailService, EmailService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.Configure<EmailOptions>(builder.Configuration.GetSection("Email"));
 
             var app = builder.Build();

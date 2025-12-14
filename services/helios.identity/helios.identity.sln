@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "helios.identity.data", "hel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "helios.identity.models", "helios.identity.models\helios.identity.models.csproj", "{0003D58E-948B-479C-A18C-2A466DA00BC8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "helios.identity.api.UnitTest", "helios.identity.api.UnitTest\helios.identity.api.UnitTest.csproj", "{AF4AC32B-5B5E-4655-98A0-866AB986DA05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0003D58E-948B-479C-A18C-2A466DA00BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0003D58E-948B-479C-A18C-2A466DA00BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0003D58E-948B-479C-A18C-2A466DA00BC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF4AC32B-5B5E-4655-98A0-866AB986DA05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF4AC32B-5B5E-4655-98A0-866AB986DA05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF4AC32B-5B5E-4655-98A0-866AB986DA05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF4AC32B-5B5E-4655-98A0-866AB986DA05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

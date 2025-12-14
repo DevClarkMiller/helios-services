@@ -23,6 +23,8 @@ namespace helios.identity.api.Queries {
                     .Include(u => u.Logins)
                     .FirstOrDefaultAsync(u => u.Id == request.UserId);
 
+                if (user is null) return IdentityResponse<UserViewModel>.NotFound("User not found");
+
                 var userModel = _mapper.Map<UserViewModel>(user);
                 return IdentityResponse<UserViewModel>.Success(userModel);
             }
