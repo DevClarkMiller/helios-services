@@ -11,9 +11,9 @@ const FieldListItem = ({ colSize = undefined, title, children }: FieldListItemPr
 
 	return (
 		<div className={`${colClassName} w-100 p-0 m-0`}>
-			<div className="row w-100 p-0 m-0">
-				<span className="col-6 fw-semibold p-0">{title}</span>
-				<span className="col-6 p-0">{children}</span>
+			<div className="row p-0 m-0">
+				<span className="col-12 col-md-6 fw-semibold p-0">{title}</span>
+				<span className="col-12 col-md-6 p-0">{children}</span>
 			</div>
 		</div>
 	);

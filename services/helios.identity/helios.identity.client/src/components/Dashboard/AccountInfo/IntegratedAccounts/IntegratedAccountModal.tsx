@@ -28,7 +28,7 @@ const IntegratedAccountModal = ({ provider, onClose }: IntegratedAccountModalPro
 					<div className="modal-body text-light">
 						{/* TODO: UPDATE API TO REQUIRE A SERVICE IE) TIC-TAC-TOE TO REGISTER BEFORE IT CAN USE IDENTITY */}
 						{/* THEN USE THAT TO TRACK THE NUMBER OF SERVICES LINKED */}
-						<div className="row w-100 m-0 form-grop">
+						<div className="row w-100 m-0 gap-3 gap-md-1">
 							<FieldListItem colSize={12} title="Registered Email: ">
 								{userLogin?.email}
 							</FieldListItem>

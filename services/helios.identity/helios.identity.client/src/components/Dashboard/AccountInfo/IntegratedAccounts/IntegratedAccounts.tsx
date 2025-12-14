@@ -5,6 +5,7 @@ import type { IntegratedAccountCardProvider } from '../../../../types/Integrated
 import { FaGoogle, FaMicrosoft, FaPlus } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { useState } from 'react';
+import MoreInformationModal from './MoreInformationModal';
 
 export interface IntegratedAccountsProps {
 	user: User;
@@ -38,6 +39,7 @@ const PROVIDERS: IntegratedAccountCardProvider[] = [
 ];
 
 const IntegratedAccounts = ({ user }: IntegratedAccountsProps) => {
+	const [showMoreInfoModal, setShowMoreInfoModal] = useState(false);
 	const [selectedProvider, setSelectedProvider] = useState<IntegratedAccountCardProvider | null>(null);
 	const getProvider = (providerId: number) => PROVIDERS[providerId - 1];
 
@@ -45,7 +47,17 @@ const IntegratedAccounts = ({ user }: IntegratedAccountsProps) => {
 		setSelectedProvider(null);
 	};
 
+	const onCloseShowMoreInfoModal = () => {
+		setSelectedProvider(null);
+		setShowMoreInfoModal(false);
+	};
+
 	const openIntegratedAccountModal = (providerId: number) => setSelectedProvider(getProvider(providerId));
+
+	const openMoreInfoModal = (providerId: number) => {
+		setSelectedProvider(getProvider(providerId));
+		setShowMoreInfoModal(true);
+	};
 
 	return (
 		<div>
@@ -56,6 +68,7 @@ const IntegratedAccounts = ({ user }: IntegratedAccountsProps) => {
 				{user.logins.map(userLogin => (
 					<div className="col-auto p-0" key={`providerId-${userLogin.providerId}`}>
 						<IntegratedAccountCard
+							openMoreInfoModal={openMoreInfoModal}
 							openIntegratedAccountModal={openIntegratedAccountModal}
 							integratedAccountCount={user.logins.length}
 							provider={getProvider(userLogin.providerId)}
@@ -64,14 +77,18 @@ const IntegratedAccounts = ({ user }: IntegratedAccountsProps) => {
 				))}
 				<div className="col-auto p-0" key={`providerId-${ADD_ACCOUNT_KEY}}`}>
 					<IntegratedAccountCard
+						openMoreInfoModal={openMoreInfoModal}
 						openIntegratedAccountModal={openIntegratedAccountModal}
 						integratedAccountCount={1}
 						provider={getProvider(4)}
 					/>
 				</div>
 			</div>
-			{selectedProvider && (
+			{!showMoreInfoModal && selectedProvider && (
 				<IntegratedAccountModal onClose={onCloseIntegratedAccountModal} provider={selectedProvider} />
+			)}
+			{showMoreInfoModal && (
+				<MoreInformationModal onClose={onCloseShowMoreInfoModal} provider={selectedProvider} />
 			)}
 		</div>
 	);

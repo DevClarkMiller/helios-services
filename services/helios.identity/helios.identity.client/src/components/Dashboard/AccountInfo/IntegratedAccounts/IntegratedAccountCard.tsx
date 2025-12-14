@@ -7,20 +7,21 @@ export interface IntegratedAccountCardProps {
 	integratedAccountCount?: number;
 	provider: IntegratedAccountCardProvider;
 	openIntegratedAccountModal: (providerId: number) => void;
+	openMoreInfoModal: (providerId: number) => void;
 }
 
 const IntegratedAccountCard = ({
-	openIntegratedAccountModal,
 	integratedAccountCount = 1,
 	provider,
+	openIntegratedAccountModal,
+	openMoreInfoModal,
 }: IntegratedAccountCardProps) => {
 	const canRemove = integratedAccountCount > 1 && provider.id != ADD_ACCOUNT_KEY;
 
 	// TODO: ADD LOGIC BEHIND THESE: IE MERGING OF ACCOUNTS
 
 	const onMoreInfo = () => {
-		if (provider.id != ADD_ACCOUNT_KEY) console.log('Cannot remove only account integrated into service');
-		else console.log('Learn how to integrate more accounts');
+		openMoreInfoModal(provider.id);
 	};
 
 	const onRemove = () => {
@@ -48,7 +49,6 @@ const IntegratedAccountCard = ({
 					{provider.icon}
 				</div>
 				<button
-					disabled
 					onClick={onClick}
 					className={`btn p-0 remove-and-info-button w-100 fw-semibold text-light ${canRemove ? 'btn-danger' : 'btn-info'}`}>
 					{canRemove ? 'Remove' : 'More Info'}
