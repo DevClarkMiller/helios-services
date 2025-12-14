@@ -37,5 +37,13 @@ namespace helios.identity.api.Controllers {
             var result = await mediator.Send(command);
             return result.ToActionResult();
         }
+
+        [HttpPost("mergeAccount")]
+        [AllowAnonymous]
+        public async Task<IActionResult> MergeAccount([FromBody] MergeAccountRequest request) {
+            var command = MergeAccountCommand.From(request);
+            var result = await mediator.Send(command);
+            return result.ToActionResult();
+        }
     }
 }

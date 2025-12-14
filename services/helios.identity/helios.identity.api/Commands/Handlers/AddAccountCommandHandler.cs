@@ -34,6 +34,14 @@ namespace helios.identity.api.Commands.Handlers {
             if (email is not null) 
                 sentEmail = await _emailService.SendMergeRequestEmail(originUser, userToMerge, request.Email);
 
+            MergeRequest mergeRequest = new() {
+                OriginUserId = originUser.Id,
+                RequestedUserId = userToMerge.Id,
+            };
+
+            await _context.AddAsync(mergeRequest);
+            await _context.SaveChangesAsync();
+
             if (sentEmail) return IdentityResponse.Success($"Sending email to {email} to merge accounts");
             return IdentityResponse.Fail("Failed to send email requesting to merge accounts");
         }

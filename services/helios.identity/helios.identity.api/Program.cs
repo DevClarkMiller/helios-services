@@ -97,6 +97,8 @@ namespace helios.identity.api {
                 c.RoutePrefix = "api/identity/swagger";
             });
 
+            app.MapGet("/swagger", () => Results.Redirect("/api/identity/swagger"));
+
             app.UseHttpsRedirection();
             app.UseRouting();
 

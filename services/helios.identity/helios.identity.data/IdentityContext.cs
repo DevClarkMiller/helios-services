@@ -7,6 +7,8 @@ namespace helios.identity.data {
 
         public DbSet<Provider> Providers { get; set; }
 
+        public DbSet<MergeRequest> MergeRequests { get; set; }
+
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) {}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
