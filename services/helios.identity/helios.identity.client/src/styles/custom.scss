@@ -44,7 +44,13 @@ $dark: #222831;
 	background-color: $secondary;
 }
 
-.integrated-account-card button {
+.integrated-account-card .remove-and-info-button {
 	border-top-left-radius: 0px;
 	border-top-right-radius: 0px;
+}
+
+.header-title {
+	background-image: linear-gradient(to right, $light, silver);
+	color: transparent;
+	background-clip: text;
 }

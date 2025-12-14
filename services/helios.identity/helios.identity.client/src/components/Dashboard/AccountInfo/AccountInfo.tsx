@@ -11,7 +11,7 @@ const AccountInfo = () => {
 	const lastLogin = user?.lastLoginAt ? humanizeDateFromIso(user?.lastLoginAt) : '';
 
 	return (
-		<div className="w-100 h-100 p-1 d-flex flex-column" style={{ gap: '8px' }}>
+		<div className="w-100 h-100 p-1 d-flex flex-column" style={{ gap: '20px' }}>
 			<h4 className="m-0">
 				Last Login Time: <span className="fw-normal">{lastLogin}</span>
 			</h4>

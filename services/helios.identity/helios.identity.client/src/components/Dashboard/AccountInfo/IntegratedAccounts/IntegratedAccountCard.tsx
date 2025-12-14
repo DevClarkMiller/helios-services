@@ -1,39 +1,25 @@
-import { FaSun, FaGoogle, FaMicrosoft, FaPlus } from 'react-icons/fa';
-
-const PROVIDERS = [
-	{
-		name: 'Google',
-		icon: <FaGoogle />,
-	},
-	{
-		name: 'Microsoft',
-		icon: <FaMicrosoft />,
-	},
-	{
-		name: 'Helios',
-		icon: <FaSun />,
-	},
-	{
-		name: 'Add New',
-		icon: <FaPlus />,
-	},
-];
+import { FaInfo } from 'react-icons/fa';
+import type { IntegratedAccountCardProvider } from '../../../../types/IntegratedAccount';
 
 export const ADD_ACCOUNT_KEY = 4;
 
 export interface IntegratedAccountCardProps {
 	integratedAccountCount?: number;
-	providerId: number;
+	provider: IntegratedAccountCardProvider;
+	openIntegratedAccountModal: (providerId: number) => void;
 }
 
-const IntegratedAccountCard = ({ integratedAccountCount = 1, providerId }: IntegratedAccountCardProps) => {
-	const provider = PROVIDERS[providerId - 1];
-	const canRemove = integratedAccountCount > 1 && providerId != ADD_ACCOUNT_KEY;
+const IntegratedAccountCard = ({
+	openIntegratedAccountModal,
+	integratedAccountCount = 1,
+	provider,
+}: IntegratedAccountCardProps) => {
+	const canRemove = integratedAccountCount > 1 && provider.id != ADD_ACCOUNT_KEY;
 
 	// TODO: ADD LOGIC BEHIND THESE: IE MERGING OF ACCOUNTS
 
 	const onMoreInfo = () => {
-		if (providerId != ADD_ACCOUNT_KEY) console.log('Cannot remove only account integrated into service');
+		if (provider.id != ADD_ACCOUNT_KEY) console.log('Cannot remove only account integrated into service');
 		else console.log('Learn how to integrate more accounts');
 	};
 
@@ -48,15 +34,23 @@ const IntegratedAccountCard = ({ integratedAccountCount = 1, providerId }: Integ
 
 	return (
 		<>
-			<div className="integrated-account-card card text-white">
-				<div className="w-100 text-center fw-semibold p-2 pb-0">{provider.name}</div>
+			<div className="integrated-account-card card text-light">
+				{provider.hasOptions ? (
+					<button
+						onClick={() => openIntegratedAccountModal(provider.id)}
+						className="btn btn-info w-100 fw-semibold text-white rounded-0">
+						<FaInfo />
+					</button>
+				) : (
+					<div className="w-100 text-center fw-semibold p-2 pb-0">{provider.name}</div>
+				)}
 				<div className="fw-semibold d-flex align-items-center flex-grow-1 p-2" style={{ fontSize: '50px' }}>
 					{provider.icon}
 				</div>
 				<button
 					disabled
 					onClick={onClick}
-					className={`btn w-100 fw-semibold text-white ${canRemove ? 'btn-danger' : 'btn-info'}`}>
+					className={`btn p-0 remove-and-info-button w-100 fw-semibold text-light ${canRemove ? 'btn-danger' : 'btn-info'}`}>
 					{canRemove ? 'Remove' : 'More Info'}
 				</button>
 			</div>
