@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35913.81 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "helios.email.api", "helios.email.api\helios.email.api.csproj", "{02F5DFF9-C9F4-4AEC-9356-40C3FAC1E644}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "helios.email.models", "helios.email.models\helios.email.models.csproj", "{469E5131-EC44-4472-BEFB-075289833F00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{02F5DFF9-C9F4-4AEC-9356-40C3FAC1E644}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02F5DFF9-C9F4-4AEC-9356-40C3FAC1E644}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02F5DFF9-C9F4-4AEC-9356-40C3FAC1E644}.Release|Any CPU.Build.0 = Release|Any CPU
+		{469E5131-EC44-4472-BEFB-075289833F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{469E5131-EC44-4472-BEFB-075289833F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{469E5131-EC44-4472-BEFB-075289833F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{469E5131-EC44-4472-BEFB-075289833F00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
