@@ -33,7 +33,7 @@ pipeline {
         stage('Database Migrations Dev') {
             steps {
                 dir("${SOLUTION_DIR}") {
-                    updateDBFromMigration("${PROJECT_NAME}", "${CONTEXT_NAME}", "${DOTNET_VERSION}", "${EF_VERSION}", 'Development')
+                    updateDBFromMigration(PROJECT_NAME, CONTEXT_NAME, DOTNET_VERSION, EF_VERSION, 'Development')
                 }
             }
         }
@@ -41,7 +41,7 @@ pipeline {
         stage('Database Migrations Prod') {
             steps {
                 dir("${SOLUTION_DIR}") {
-                    updateDBFromMigration("${PROJECT_NAME}", "${CONTEXT_NAME}", "${DOTNET_VERSION}", "${EF_VERSION}", 'Production')
+                    updateDBFromMigration(PROJECT_NAME, "CONTEXT_NAME, DOTNET_VERSION, EF_VERSION, 'Production')
                 }
             }
         }

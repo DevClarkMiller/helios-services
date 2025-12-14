@@ -49,6 +49,11 @@ $dark: #222831;
 	border-top-right-radius: 0px;
 }
 
+.info-button {
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+
 .header-title {
 	background-image: linear-gradient(to right, $light, silver);
 	color: transparent;
