@@ -40,6 +40,16 @@ namespace helios.identity.data {
                     Name = "helios"
                 },
             ]);
+
+            modelBuilder.Entity<MergeRequest>(entity => {
+                entity.HasOne(mr => mr.RequestedUser)
+                      .WithMany()
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(mr => mr.OriginUser)
+                      .WithMany()
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }

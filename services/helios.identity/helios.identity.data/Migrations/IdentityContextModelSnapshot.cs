@@ -145,13 +145,13 @@ namespace helios.identity.data.Migrations
                     b.HasOne("helios.identity.data.User", "OriginUser")
                         .WithMany()
                         .HasForeignKey("OriginUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("helios.identity.data.User", "RequestedUser")
                         .WithMany()
                         .HasForeignKey("RequestedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("OriginUser");

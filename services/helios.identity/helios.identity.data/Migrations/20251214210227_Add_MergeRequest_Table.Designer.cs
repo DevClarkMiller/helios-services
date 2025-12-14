@@ -12,7 +12,7 @@ using helios.identity.data;
 namespace helios.identity.data.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20251214205327_Add_MergeRequest_Table")]
+    [Migration("20251214210227_Add_MergeRequest_Table")]
     partial class Add_MergeRequest_Table
     {
         /// <inheritdoc />
@@ -148,13 +148,13 @@ namespace helios.identity.data.Migrations
                     b.HasOne("helios.identity.data.User", "OriginUser")
                         .WithMany()
                         .HasForeignKey("OriginUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("helios.identity.data.User", "RequestedUser")
                         .WithMany()
                         .HasForeignKey("RequestedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("OriginUser");
