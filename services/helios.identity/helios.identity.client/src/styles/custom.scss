@@ -1,11 +1,50 @@
 // 1. Override default variables before importing Bootstrap
 $primary: #948979;
-$secondary: #393E46 ;
+$secondary: #393e46;
 $success: #198754;
 $info: #0dcaf0;
 $warning: #ffc107;
 $danger: #dc3545;
-$light: #C4C0BA;
+$light: #c4c0ba;
 $dark: #222831;
 
-@import "bootstrap/scss/bootstrap";
+@import 'bootstrap/scss/bootstrap';
+// @import 'bootstrap/functions';
+// @import 'bootstrap/variables';
+// @import 'bootstrap/mixins';
+
+.btn-icon {
+	display: flex !important;
+	justify-content: center;
+	align-items: center;
+}
+
+.sidenav {
+	height: 100%;
+	width: 100%;
+	border-top: 1px solid rgba($secondary, 0.25);
+}
+
+.slide-pane__header {
+	background-color: $secondary;
+	color: white;
+}
+
+.slide-pane__content {
+	background-color: $dark;
+	color: white;
+}
+
+.integrated-account-card {
+	height: 150px;
+	width: 150px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: $secondary;
+}
+
+.integrated-account-card button {
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+}

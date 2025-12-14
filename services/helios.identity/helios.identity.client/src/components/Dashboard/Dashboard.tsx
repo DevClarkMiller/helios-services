@@ -1,27 +1,38 @@
+import React, { useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import SideNav from './SideNav/SideNav';
 import AccountInfo from './AccountInfo/AccountInfo';
-import { createContext } from 'react';
-import useDashboard, { type DashboardContextType } from './useDashboard';
+import { RxHamburgerMenu } from 'react-icons/rx';
+import type { SharedSideNavProps } from '../../types/SideNav';
+import { AppContext } from '../../context/AppContextProvider';
+import SideNav from './SideNav/SideNav';
 
-export const DashboardContext = createContext({} as DashboardContextType);
+export interface SideNavProps extends SharedSideNavProps {
+	isSideNavOpen: boolean;
+	setIsSideNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 const Dashboard = () => {
-	const { contextValue } = useDashboard();
+	const { page, setPage, setIsSideNavOpen } = useContext(AppContext);
 
 	return (
-		<DashboardContext.Provider value={contextValue}>
-			<div className="row w-100 h-100 text-white m-0">
-				<div className="col-2 p-0 h-100">
-					<SideNav />
-				</div>
-				<div className="col">
-					<Routes>
-						<Route path="/" element={<AccountInfo />} />
-					</Routes>
-				</div>
+		<div className="row w-100 h-100 text-white m-0 align-items-start justify-content-start">
+			<div className="col-12 d-md-none">
+				<button
+					className="w-100 h-100 btn text-white d-flex align-items-center justify-content-center"
+					style={{ fontSize: '35px' }}
+					onClick={() => setIsSideNavOpen(prevIsSideNavOpen => !prevIsSideNavOpen)}>
+					<RxHamburgerMenu />
+				</button>
 			</div>
-		</DashboardContext.Provider>
+			<div className="col-2 p-0 h-100 d-none d-md-block">
+				<SideNav page={page} setPage={setPage} />
+			</div>
+			<div className="col-12 col-md h-100">
+				<Routes>
+					<Route path="/" element={<AccountInfo />} />
+				</Routes>
+			</div>
+		</div>
 	);
 };
 

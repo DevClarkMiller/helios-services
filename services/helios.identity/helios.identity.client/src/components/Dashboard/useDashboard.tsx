@@ -1,18 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 export interface DashboardContextType {
 	page: string;
+	isSideNavOpen: boolean;
 	setPage: React.Dispatch<React.SetStateAction<string>>;
+	// setIsSideNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const useDashboard = () => {
 	const [page, setPage] = useState('Home');
+	const [isSideNavOpen, setIsSideNavOpen] = useState(false);
 
-	const contextValue = useMemo(() => {
-		return { page, setPage };
-	}, [page, setPage]);
-
-	return { contextValue };
+	return { isSideNavOpen, page, setIsSideNavOpen, setPage };
 };
 
 export default useDashboard;
