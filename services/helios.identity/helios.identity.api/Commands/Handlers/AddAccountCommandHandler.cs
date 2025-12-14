@@ -23,7 +23,6 @@ namespace helios.identity.api.Commands.Handlers {
             var userToMerge = await _context.Users.FirstOrDefaultAsync(u => u.Id == userLogin.UserId);
 
             // We chillin now, so lets merge accounts :)
-
             // Send email to user which takes them the page asking if they'd like to merge, store token in URL of link to page
 
             string? email = userLogin.Email;
