@@ -18,8 +18,8 @@ const Dashboard = () => {
 		<div className="row w-100 h-100 text-white m-0 align-items-start justify-content-start">
 			<div className="col-12 d-md-none">
 				<button
-					className="w-100 h-100 btn text-white d-flex align-items-center justify-content-center"
-					style={{ fontSize: '35px' }}
+					className="h-100 btn text-white d-flex align-items-center justify-content-start p-0 pt-1"
+					style={{ fontSize: '40px' }}
 					onClick={() => setIsSideNavOpen(prevIsSideNavOpen => !prevIsSideNavOpen)}>
 					<RxHamburgerMenu />
 				</button>

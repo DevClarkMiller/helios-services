@@ -39,7 +39,7 @@ const IntegratedAccountCard = ({
 				{provider.hasOptions ? (
 					<button
 						onClick={() => openIntegratedAccountModal(provider.id)}
-						className="btn btn-info w-100 fw-semibold text-white rounded-0">
+						className="btn btn-info w-100 fw-semibold text-light rounded-0">
 						<FaInfo />
 					</button>
 				) : (
