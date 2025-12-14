@@ -80,7 +80,7 @@ namespace helios.identity.api.Services {
              await _context.Providers.ToDictionaryAsync(p => p.Id, p => p);
 
         private string getIntegratedAccountRow(string header, string body) =>
-            $"<td width=\"30%\" style=\"font-weight: 600\">{header}</td><td>{body}</td>";
+            $"<tr><td width=\"30%\" style=\"font-weight: 600;color: #c4c0ba;\">{header}</td><td style=\"color: #c4c0ba;\">{body}</td></tr>";
 
         private async Task<string> BuildMergeRequestEmailIntegratedAccounts(User user) {
             var sb = new StringBuilder();
@@ -91,13 +91,13 @@ namespace helios.identity.api.Services {
                 Provider provider = providerDict[ul.ProviderId];
 
                 sb.AppendLine("<tr><td class=\"nested-card\"><table style=\"width: 100%;\" >");
-                sb.AppendLine("<tbody><tr>");
+                sb.AppendLine("<tbody>");
                 sb.AppendLine(getIntegratedAccountRow("Type", provider.Name));
                 if (ul.Email is not null)
                     sb.AppendLine(getIntegratedAccountRow("Email", ul.Email));
                 if (ul.PhoneNumber is not null)
                     sb.AppendLine(getIntegratedAccountRow("Phone Number", ul.PhoneNumber));
-                sb.AppendLine("</tr></tbody>");
+                sb.AppendLine("</tbody>");
                 sb.AppendLine(" </table></td></tr>");
             }
 

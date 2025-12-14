@@ -23,7 +23,7 @@ namespace helios.identity.api.Controllers {
             return result.ToActionResult();
         }
 
-        [HttpPost]
+        [HttpPost("addAccount")]
         public async Task<IActionResult> AddAccount([FromBody] AddAccountRequest request) {
             AuthenticateResult authResult = await HttpContext.AuthenticateAsync("Bearer");
             var claims = authResult.Principal!.Identities.FirstOrDefault()?.Claims;

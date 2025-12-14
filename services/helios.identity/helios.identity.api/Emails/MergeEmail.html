@@ -24,6 +24,7 @@
 
 		.user-card {
 			width: 75%;
+			max-width: 550px;
 		}
 
 		.nested-card {
@@ -50,7 +51,7 @@
 			<tr>
 				<td>
 					<div style="text-align: start; margin-bottom: 25px">
-						Good evening, a helios-identity user is requesting to merge accounts to you.
+						Greetings, a helios-identity user is requesting to merge accounts with you. <br />
 						Please confirm the user below is correct.
 					</div>
 				</td>
@@ -64,20 +65,20 @@
 									<table>
 										<tbody>
 											<tr>
-												<td width="30%" style="font-weight: 600;">
+												<td width="30%" style="font-weight: 600; color: #c4c0ba;">
 													UserId
 												</td>
-												<td>{{originUserId}}</td>
+												<td style="color: #c4c0ba;">{{originUserId}}</td>
 											</tr>
 										</tbody>
 									</table>
 								</td>
 							</tr>
-							<tr><td>Integrated Accounts</td></tr>
+							<tr><td style="color: #c4c0ba;">Integrated Accounts</td></tr>
 							{{integratedAccounts}}
-							<tr><td>If all is correct, please click the merge button to continue</td></tr>
+							<tr><td style="color: #c4c0ba;">If all is correct, please click the merge button to continue</td></tr>
 							<tr><td align="center">
-								<a style="text-decoration: none;" target="_blank" href="{{mergeUrl}}"><div class="merge-button">Merge</div></a>
+								<a style="text-decoration: none; color: #c4c0ba;" target="_blank" href="{{mergeUrl}}"><div class="merge-button">Merge</div></a>
 							</td></tr>
 						</tbody>
 					</table>
