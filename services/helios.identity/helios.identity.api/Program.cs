@@ -1,3 +1,4 @@
+using helios.identity.api.Config;
 using helios.identity.api.Mappings;
 using helios.identity.api.Services;
 using helios.identity.data;
@@ -74,6 +75,7 @@ namespace helios.identity.api {
                 });
 
             builder.Services.AddSingleton<IEmailService, EmailService>();
+            builder.Services.Configure<EmailOptions>(builder.Configuration.GetSection("Email"));
 
             var app = builder.Build();
 
