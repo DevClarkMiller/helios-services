@@ -1,6 +1,6 @@
 ﻿namespace helios.identity.models {
-    public class CreateUserRequest {
+    public class AddAccountRequest {
         public required string Email { get; set; }
-        public required string Password { get; set; }
+        public required int ProviderId { get; set; }
     }
 }

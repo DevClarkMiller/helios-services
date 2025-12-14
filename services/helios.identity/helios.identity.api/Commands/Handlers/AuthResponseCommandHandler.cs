@@ -10,6 +10,7 @@ namespace helios.identity.api.Commands.Handlers {
     public class AuthResponseCommandHandler : IRequestHandler<AuthResponseCommand, string> {
         private IdentityContext _context;
         IConfiguration _configuration;
+
         public AuthResponseCommandHandler(IdentityContext identityContext, IConfiguration configuration) {
             _context = identityContext;
             _configuration = configuration;
@@ -20,6 +21,7 @@ namespace helios.identity.api.Commands.Handlers {
 
             var providerKey = claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             string email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value!;
+            string phone = claims?.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone)?.Value!;
             string firstName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value!;
             string lastName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value!;
 
@@ -45,8 +47,6 @@ namespace helios.identity.api.Commands.Handlers {
                     await _context.SaveChangesAsync(cancellationToken);
 
                 } else {
-                    // TODO: FIND A WAY TO CHECK IF THE USER ALREADY EXISTS
-
                     // Create the user
                     user = new User {
                         FirstName = firstName,
@@ -61,9 +61,10 @@ namespace helios.identity.api.Commands.Handlers {
                     // Create the UserLogin
                     userLogin = new UserLogin {
                         Email = email,
+                        PhoneNumber = phone,
                         ProviderKey = providerKey,
                         ProviderId = request.ProviderId,
-                        UserId = user.Id
+                        UserId = user.Id,
                     };
 
                     await _context.AddAsync(userLogin, cancellationToken);

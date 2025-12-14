@@ -1,4 +1,5 @@
 using helios.identity.api.Mappings;
+using helios.identity.api.Services;
 using helios.identity.data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -71,6 +72,8 @@ namespace helios.identity.api {
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.CallbackPath = "/api/identity/signin-google";
                 });
+
+            builder.Services.AddSingleton<IEmailService, EmailService>();
 
             var app = builder.Build();
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace helios.identity.api.Models {
     public class IdentityResponse<T> {
@@ -43,5 +44,13 @@ namespace helios.identity.api.Models {
                 }
             };
         }
+    }
+
+    public static class IdentityResponse {
+        public static IdentityResponse<T> Success<T>(T data, string? message = null) => IdentityResponse<T>.Success(data, message);
+        public static IdentityResponse<string> Fail(string message, string? errorCode = null) => IdentityResponse<string>.Fail(message, errorCode);
+        public static IdentityResponse<string> NotFound(string message = "Resource not found") => IdentityResponse<string>.NotFound(message);
+        public static IdentityResponse<string> ValidationError(string message = "Validation failed") => IdentityResponse<string>.ValidationError(message);
+        public static IdentityResponse<string> Unauthorized(string message = "Unauthorized access") => IdentityResponse<string>.Unauthorized(message);
     }
 }
