@@ -6,7 +6,10 @@ import {
   normalizeFetcherData,
 } from "./ApiHelpers.js";
 
-const fetcher = async <T>(url: string | URL): Promise<FetcherData<T>> => {
+const fetcher = async <T>(
+  url: string | URL,
+  isText = false,
+): Promise<FetcherData<T>> => {
   let payload: FetcherData<T> = {};
 
   try {
@@ -14,7 +17,7 @@ const fetcher = async <T>(url: string | URL): Promise<FetcherData<T>> => {
 
     const response = await fetch(url.toString(), { headers: headers });
     if (response.status == 401) throw new UnauthorizedError("Unauthorized");
-    const data = await response.json();
+    const data = isText ? await response.text() : await response.json();
     payload.data = data;
   } catch (err: unknown) {
     payload = handleErr(err, payload);

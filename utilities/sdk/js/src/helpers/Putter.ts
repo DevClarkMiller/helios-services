@@ -8,7 +8,8 @@ import {
 
 const putter = async <T>(
   url: string | URL,
-  body: any
+  body: any,
+  isText = false,
 ): Promise<FetcherData<T>> => {
   let payload: FetcherData<T> = {};
 
@@ -21,7 +22,7 @@ const putter = async <T>(
       body: body,
     });
     if (response.status == 401) throw new UnauthorizedError("Unauthorized");
-    payload.data = await response.json();
+    payload.data = isText ? await response.text() : await response.json();
   } catch (err: unknown) {
     payload = handleErr(err, payload);
   }
