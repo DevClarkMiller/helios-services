@@ -4,8 +4,9 @@ using helios.identity.api.Services;
 using helios.identity.data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;	
 using Microsoft.IdentityModel.Tokens;
+using FreeMediator;
 using System.Text;
 
 namespace helios.identity.api {
@@ -16,14 +17,13 @@ namespace helios.identity.api {
 
             builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connectionString));
 
-            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<IdentityContext>();
             LoadAppsettings(builder);
 
             // Add services to the container.
             builder.Services.AddDbContext<IdentityContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            builder.Services.AddMediatR(config => {
+            builder.Services.AddMediator(config => {
                 config.RegisterServicesFromAssembly(typeof(Program).Assembly);
             });
 
@@ -74,6 +74,8 @@ namespace helios.identity.api {
 
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.Configure<EmailOptions>(builder.Configuration.GetSection("Email"));
+
+			builder.Services.AddSingleton<ITokenService, TokenService>();
 
             var app = builder.Build();
 

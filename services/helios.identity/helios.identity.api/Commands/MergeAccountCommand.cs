@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using FreeMediator;
 using helios.identity.api.Models;
 using helios.identity.models;
 

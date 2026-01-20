@@ -1,5 +1,5 @@
 ﻿using helios.identity.api.Models;
-using MediatR;
+using FreeMediator;
 
 namespace helios.identity.api.Commands.Handlers {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, IdentityResponse<string>> {

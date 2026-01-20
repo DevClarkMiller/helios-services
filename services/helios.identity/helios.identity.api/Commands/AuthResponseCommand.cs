@@ -1,5 +1,5 @@
 ﻿using helios.identity.data;
-using MediatR;
+using FreeMediator;
 using Microsoft.AspNetCore.Authentication;
 
 namespace helios.identity.api.Commands {

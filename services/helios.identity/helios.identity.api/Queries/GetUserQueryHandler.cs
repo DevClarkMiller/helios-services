@@ -2,7 +2,7 @@
 using helios.identity.api.Models;
 using helios.identity.data;
 using helios.identity.models;
-using MediatR;
+using FreeMediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace helios.identity.api.Queries {

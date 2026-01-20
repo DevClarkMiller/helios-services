@@ -1,7 +1,7 @@
 ﻿using helios.identity.api.Models;
 using helios.identity.api.Services;
 using helios.identity.data;
-using MediatR;
+using FreeMediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace helios.identity.api.Commands.Handlers {

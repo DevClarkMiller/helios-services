@@ -8,6 +8,7 @@ namespace helios.identity.data {
         public DbSet<Provider> Providers { get; set; }
 
         public DbSet<MergeRequest> MergeRequests { get; set; }
+		public DbSet<ConnectedService> ConnectedServices { get; set; }
 
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) {}
 
@@ -22,6 +23,12 @@ namespace helios.identity.data {
                       .HasForeignKey(l => l.UserId)
                       .OnDelete(DeleteBehavior.Cascade);
             });
+
+			modelBuilder.Entity<ConnectedService>(entity =>
+			{
+				entity.Property(cs => cs.Id)
+                      .HasDefaultValueSql("NEWID()");
+			});
 
             modelBuilder.Entity<UserLogin>()
                 .HasKey(ul => new { ul.UserId, ul.ProviderKey });

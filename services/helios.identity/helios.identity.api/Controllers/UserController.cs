@@ -1,7 +1,7 @@
 ﻿using helios.identity.api.Commands;
 using helios.identity.api.Queries;
 using helios.identity.models;
-using MediatR;
+using FreeMediator;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

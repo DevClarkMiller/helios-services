@@ -1,6 +1,6 @@
 ﻿using helios.identity.api.Models;
 using helios.identity.models;
-using MediatR;
+using FreeMediator;
 
 namespace helios.identity.api.Commands {
     public class AddAccountCommand : AddAccountRequest, IRequest<IdentityResponse<string>>{ 

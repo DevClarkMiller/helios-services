@@ -10,7 +10,7 @@ import { defineConfig } from 'eslint/config';
 export default defineConfig([
 	js.configs.recommended,
 	{
-		files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+		files: ['src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 		languageOptions: {
 			parser: tseslint.parser,
 			ecmaVersion: 'latest',

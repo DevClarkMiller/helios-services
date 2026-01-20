@@ -1,19 +1,22 @@
 ﻿using helios.identity.data;
-using MediatR;
+using FreeMediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using helios.identity.api.Services;
 
 namespace helios.identity.api.Commands.Handlers {
     public class AuthResponseCommandHandler : IRequestHandler<AuthResponseCommand, string> {
         private IdentityContext _context;
-        IConfiguration _configuration;
+        private IConfiguration _configuration;
+		private ITokenService _tokenService;
 
-        public AuthResponseCommandHandler(IdentityContext identityContext, IConfiguration configuration) {
+        public AuthResponseCommandHandler(IdentityContext identityContext, IConfiguration configuration, ITokenService tokenService) {
             _context = identityContext;
             _configuration = configuration;
+			_tokenService = tokenService;
         }
         
         public async Task<string> Handle(AuthResponseCommand request, CancellationToken cancellationToken) {
@@ -73,25 +76,7 @@ namespace helios.identity.api.Commands.Handlers {
 
                 await transaction.CommitAsync(cancellationToken);
 
-                var tokenHandler = new JwtSecurityTokenHandler();
-
-                var jwtSecret = _configuration.GetSection("AppSettings").GetValue<string>("Secret");
-                var key = Encoding.ASCII.GetBytes(jwtSecret!);
-                var tokenDescriptor = new SecurityTokenDescriptor {
-                    // We only store the users id, the rest of the info can be fetched when needed
-                    Subject = new ClaimsIdentity(new Claim[] { 
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    }),
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                        SecurityAlgorithms.HmacSha256Signature
-                    )
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                string returnToken = tokenHandler.WriteToken(token);
-
-                return returnToken;
+                return _tokenService.CreateUserToken(user);
             } catch {
                 await transaction.RollbackAsync(cancellationToken);
                 throw;

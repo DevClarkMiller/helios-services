@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using FreeMediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace helios.identity.api.Models {
