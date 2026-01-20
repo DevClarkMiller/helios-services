@@ -55,7 +55,7 @@ pipeline {
                 }
             }
             steps {
-                dir("${DIR}") { 
+                dir(DIR) { 
                     sh 'npm install'
 					loadEnvFile(SOLUTION, PROJECT, 'development')
 					loadEnvFile(SOLUTION, PROJECT, 'production')
@@ -89,7 +89,7 @@ pipeline {
                 }
             }
             steps {
-                dir("${DIR}") {
+                dir(DIR) {
                     scpBuildFilesToWWW(USERNAME, DOMAIN, DEV_DOMAIN)
                 }
             }
@@ -120,7 +120,7 @@ pipeline {
                 }
             }
             steps {
-                dir("${DIR}") {
+                dir(DIR) {
                     sh 'npm run build'
                 }
             }

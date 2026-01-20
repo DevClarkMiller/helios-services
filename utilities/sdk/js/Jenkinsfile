@@ -1,0 +1,79 @@
+@Library('pipeline-lib') _
+
+pipeline {
+    agent any
+
+    parameters {
+        booleanParam(
+            name: 'Force',
+            defaultValue: false,
+            description: 'Forces run even if there are no changes'
+        )
+    }
+
+    environment {
+        DIR = 'utilities/sdk/js'
+        USERNAME = credentials('vps-username')
+        DOMAIN = credentials('vps-domain')
+        PACKAGE = "${DIR}/package.json"
+        NPM_TOKEN = credentials('helios-utilities-npm-token')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            when {
+                anyOf {
+                    changeset PACKAGE
+                    expression { return params.Force }
+                }
+            }
+            steps {
+                dir(DIR) { 
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Build') {
+            when {
+                anyOf {
+                    changeset PACKAGE
+                    expression { return params.Force }
+                }
+            }
+            steps {
+                dir(DIR) {
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Publish Package') {
+            when {
+                anyOf {
+                    changeset PACKAGE
+                    expression { return params.Force }
+                }
+            }
+            steps {
+                dir(DIR) {
+					sh '''
+						set -eu
+						echo "registry=https://registry.npmjs.org/" > .npmrc
+						echo "always-auth=true" >> .npmrc
+						echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+						npm whoami || true
+						npm publish --access public
+						rm -f .npmrc
+					'''
+                }
+            }
+        }
+    }
+}
