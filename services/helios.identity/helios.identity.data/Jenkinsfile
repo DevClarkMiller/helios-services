@@ -31,6 +31,10 @@ pipeline {
         }
 
         stage('Database Migrations Dev') {
+			when {
+				changeset 'IdentitiyContext.cs'
+			}
+
             steps {
                 dir(SOLUTION_DIR) {
                     updateDBFromMigration(PROJECT_NAME, CONTEXT_NAME, DOTNET_VERSION, EF_VERSION, 'Development')
@@ -39,6 +43,10 @@ pipeline {
         }
 
         stage('Database Migrations Prod') {
+			when {
+				changeset 'IdentitiyContext.cs'
+			}
+
             steps {
                 dir(SOLUTION_DIR) {
                     updateDBFromMigration(PROJECT_NAME, CONTEXT_NAME, DOTNET_VERSION, EF_VERSION, 'Production')
