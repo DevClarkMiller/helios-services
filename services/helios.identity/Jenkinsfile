@@ -37,8 +37,7 @@ pipeline {
                     def services = [
                         'helios.services.identity.api': 'services/helios.identity/helios.identity.api',
                         'helios.services.identity.client': 'services/helios.identity/helios.identity.client',
-                        'helios.services.identity.data': 'services/helios.identity/helios.identity.data',
-						'helios.utilities.'
+                        'helios.services.identity.data': 'services/helios.identity/helios.identity.data'
                     ]
 
                     def toTrigger = []
