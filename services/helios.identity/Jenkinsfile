@@ -23,11 +23,6 @@ pipeline {
 		)
     }
 
-    environment {
-        USERNAME = credentials('vps-username')
-        DOMAIN = credentials('vps-domain')
-    }
-
     stages {
         stage('Determine Changes and run pipelines') {
             steps {
