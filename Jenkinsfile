@@ -1,43 +1,8 @@
 @Library('pipeline-lib') _
 
-pipeline {
-    agent any
-
-    stages {
-        stage('Determine Changes and run pipelines') {
-            steps {
-                checkout scm
-
-                script {
-                    def pipelines = [
-						'helios.services.identity': 'services/helios.identity',
-						'helios.utilities': 'utilities'
-                    ]
-
-                    def toTrigger = []
-                    pipelines.each { service, path ->
-                        if (params.FORCE_RUN || checkMicroservice(path)) {
-                            echo "Changes detected in ${service}, will trigger pipelines."
-                            toTrigger << service // Add to the list
-                        } else {
-                            echo "No changes in ${service}, skipping."
-                        }
-                    }
-
-                    if (toTrigger.isEmpty()) {
-                        echo "No services changed. Nothing to trigger."
-                    }
-					
-					// TODO: ENSURE THIS PIPELINE DOESNT WAIT FOR THESE JOBS TO FINISH
-
-                    toTrigger.each { service -> 
-                        echo "Triggering ${service}..."
-                        build job: service,
-                                wait: false // set false for async
-                        echo "${service} finished."
-                    }
-                }
-            }
-        }
-    }
-}
+multiServicePipeline(
+    pipelines: [
+        'helios.services.identity': 'services/helios.identity',
+		'helios.utilities': 'utilities'
+    ]
+)
