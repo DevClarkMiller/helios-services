@@ -34,6 +34,8 @@ pipeline {
         PACKAGE_LOCK = "${DIR}/package-lock.json"
         SOLUTION = 'helios.identity'
         PROJECT = 'client'
+		DEV_DOMAIN = 'dev.helios-identity.qrcool.ca'
+		PROD_DOMAIN = 'helios-identity.qrcool.ca'
     }
 
     stages {
@@ -88,7 +90,7 @@ pipeline {
             }
             steps {
                 dir("${DIR}") {
-                    scpBuildFilesToWWW(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca')
+                    scpBuildFilesToWWW(USERNAME, DOMAIN, DEV_DOMAIN)
                 }
             }
         }
@@ -103,7 +105,7 @@ pipeline {
 
             steps {
                 dir("${DIR}") {
-                    updateNginxConf(USERNAME, DOMAIN, 'dev.helios-identity.qrcool.ca', 'nginx.dev.conf')
+                    updateNginxConf(USERNAME, DOMAIN, DEV_DOMAIN, 'nginx.dev.conf')
                 }
             }
         }
@@ -134,8 +136,8 @@ pipeline {
                 }
             }
             steps {
-                dir("${DIR}") {
-                    scpBuildFilesToWWW(USERNAME, DOMAIN, 'helios-identity.qrcool.ca')
+                dir(DIR) {
+                    scpBuildFilesToWWW(USERNAME, DOMAIN, PROD_DOMAIN)
                 }
             }
         }
@@ -148,8 +150,8 @@ pipeline {
                 }
             }
             steps {
-                dir("${DIR}") {
-                    updateNginxConf(USERNAME, DOMAIN, 'helios-identity.qrcool.ca', 'nginx.prod.conf')
+                dir(DIR) {
+                    updateNginxConf(USERNAME, DOMAIN, PROD_DOMAIN, 'nginx.prod.conf')
                 }
             }
         }
